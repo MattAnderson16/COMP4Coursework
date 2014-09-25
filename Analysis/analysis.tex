@@ -1,20 +1,52 @@
 \chapter{Analysis}
 
 \section{Introduction}
-
 My chosen client is Michael Seamark; He is fairly experienced with working with computer systems and mainly uses a laptop to assist with his job and to surf the internet. However, he also uses an iPhone to check his emails and keep in contact with people through social networking sites.
 
 \subsection{Define the current system}
-Michael has requested that I produce a metering system which monitors gas, water and electricity consumption with several graphical outputs to represent the use and any possible savings with a way to convert between units. It should be able indicate the current cost for the consumption and predict future costs.
+Michael has requested that I produce a metering system which monitors gas, water and electricity consumption with several graphical outputs to represent the use and any possible savings with a way to convert between units. It should be able indicate the current cost for the consumption and predict future costs. Currently, Michael relies on the monthly bills to give him the information on his consumption of electricity, gas and water and then he has to work out any savings, calculate future costs and convert to other units if needed manually.
+
 \subsection{Describe the problems}
+One problem with the current system that Michael is using is that he cannot get the consumption of gas, electricity or water until the end of the month which means that he cannot check the cost of what he has used until the end of the month in which case the cost could have gone up significantly. In addition to that, the method he has to work out current spendings and future savings is inefficient and more prone to mistakes because he is calculating it manually and therefore can get values wrong or misread values from the bill 
 
 \subsection{Section appendix}
+\subsubsection{Client Interview}
+\begin{enumerate}
+	\item What is the proposed system required to do?
+	\item What are the problems with the current way of doing things?
+	\item What data is currently recorded?
+	\item How much data is currently recorded?
+	\item How much data will the proposed system record?
+	\item How often will the data need to be updated?
+	\item Will the changes come in batches or in groups of one and two?
+	\item How important is the data that is stored?
+	\item What processes are performed by the current system?
+	\item What processes will the new system be required to do?
+	\item What algorithms do these processes use?
+	\item Which processes should be executed manually?
+	\item What are the inputs to the current system?
+	\item What inputs are required for the proposed system?
+	\item What are the outputs from the current system?
+	\item What outputs will be required from the proposed system?
+	\item How are errors handled in the current system?
+	\item What errors should be reported in the proposed system?
+\end{enumerate}
 
 \section{Investigation}
 
 \subsection{The current system}
 
 \subsubsection{Data sources and destinations}
+\begin{center}
+\begin{tabular}{|1|1|1|1|}
+	\hline
+	\textbf{Source} & \textbf{Data} & \textbf{Example Data} & \textbf{Destination} \\ \hline
+	Bill & Gas consumption data & Gas consumption for past month & Notebook \\ \hline
+	Bill & Electricity consumption data & Electricity consumption for past month & Notebook \\ \hline
+	Bill & Water consumption data & Water consumption for past month & Note book \\ \hline
+\end{tabular}
+\label{tab:Data sources and destinations for current system}
+\end{center}
 
 \subsubsection{Algorithms}
 
