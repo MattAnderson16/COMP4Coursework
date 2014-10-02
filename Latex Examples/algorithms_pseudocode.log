@@ -1,12 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2014.9.23)  23 SEP 2014 18:45
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9) (preloaded format=latex 2014.10.1)  2 OCT 2014 12:36
 entering extended mode
-**C:/Users/Matthew/Documents/GitHub/COMP4Coursework/Latex*Examples/algorithms_p
-seudocode.tex
-
-("C:/Users/Matthew/Documents/GitHub/COMP4Coursework/Latex Examples/algorithms_p
-seudocode.tex"
+**algorithms_pseudocode.tex
+("U:\git\COMP4Coursework\Latex Examples\algorithms_pseudocode.tex"
 LaTeX2e <2014/05/01>
-Babel <3.9k> and hyphenation patterns for 68 languages loaded.
+Babel <3.9l> and hyphenation patterns for 68 languages loaded.
 
 ! LaTeX Error: Environment algorithm undefined.
 
@@ -29,10 +26,10 @@ or  <return>  to continue without it.
  
 Here is how much of TeX's memory you used:
  9 strings out of 493706
- 501 string characters out of 3146189
- 52139 words of memory out of 3000000
- 3428 multiletter control sequences out of 15000+200000
+ 420 string characters out of 3142226
+ 52144 words of memory out of 3000000
+ 3429 multiletter control sequences out of 15000+200000
  3640 words of font info for 14 fonts, out of 3000000 for 9000
  1025 hyphenation exceptions out of 8191
- 5i,0n,4p,160b,16s stack positions out of 5000i,500n,10000p,200000b,50000s
-!  ==> Fatal error occurred, no output PDF file produced!
+ 5i,0n,4p,95b,16s stack positions out of 5000i,500n,10000p,200000b,50000s
+No pages of output.
