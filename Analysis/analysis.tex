@@ -185,17 +185,19 @@ The proposed system will output average consumptions for gas, electricity and wa
 \subsubsection{Data flow diagram}
 \begin{figure}[H]
     \includegraphics[width=\textwidth]{./dataflowdiagrams1.png}
-    \caption{data flow diagrams} \label{fig:dataflowdiagrams}
+    \caption{data flow diagrams for current system} \label{fig:dataflowdiagrams}
 \end{figure}
 
 \begin{figure}[H]
     \includegraphics[width=\textwidth]{./dataflowdiagrams2.png}
-    \caption{data flow diagrams} \label{fig:dataflowdiagrams}
+    \caption{data flow diagrams for current system} \label{fig:dataflowdiagrams}
 \end{figure}
 
 \subsubsection{Input Forms, Output Forms, Report Formats}
 
 \subsection{The proposed system}
+
+\subsubsection{Data sources and destinations}
 \begin{center}
 \begin{tabular}{|l|l|l|l|}
 	\hline
@@ -210,14 +212,38 @@ The proposed system will output average consumptions for gas, electricity and wa
 \label{tab:Data sources and destinations for the proposed system}
 \end{center}
 
-\subsubsection{Data sources and destinations}
-
 \subsubsection{Data flow diagram}
+\begin{figure}[H]
+    \includegraphics[width=\textwidth]{./dataflowdiagrams3.png}
+    \caption{data flow diagrams for proposed system} \label{fig:dataflowdiagrams}
+\end{figure}
+
+\begin{figure}[H]
+    \includegraphics[width=\textwidth]{./dataflowdiagrams4.png}
+    \caption{data flow diagrams for proposed sysem} \label{fig:dataflowdiagrams}
+\end{figure}
 
 \subsubsection{Data dictionary}
-
+\begin{center}
+\begin{tabular}{|p{3cm}|p{1cm}|p{1.5cm}|p{3cm}|p{2cm}|p{3.5cm}|}
+	\hline1
+	\textbf{name} & \textbf{data type} & \textbf{length} & \textbf{validation} & \textbf{example data} & \textbf{comment} \\ \hline
+	Gas Consumption & Single & 4 bytes & must be greater than 0 & 256.743 & value can be in multiple units \\ \hline
+	Electric Consumption & Single & 4 bytes & must be greater than 0 & 452.534 &  \\ \hline
+	Water Consumption & Single & 4 bytes & must be greater than 0 & 537.322 &  \\ \hline
+	Gas cost per unit & Single & 4 bytes & must be between 0 and 10 & 1.53 & value is in pounds \\ \hline
+	Electric cost per unit & Single & 4 bytes & must be between 0 and 10 & 1.42 &  \\ \hline
+	Water cost per unit & Single & 4 bytes & must be between 0 and 10 & 1.42 &  \\ \hline
+	Gas cost for the last month & Single & 4 bytes & must be greater than 0 & 532.533 & value is in pounds \\ \hline
+	Electric cost for the last month & Single & 4 bytes & must be greater than 0 & 412.176 &  \\ \hline
+	Water cost for the last month & Single & 4 bytes & must be greater than 0 & 164.865 &  \\ \hline
+	Average gas consumption for past few months & Single & 4 bytes & must be a value greater than 0 & 211.431 & value can be in multiple units \\ \hline
+	Average electric consumption for past few months & Single & 4 bytes & must be a value greater than 0 & 542.134 &  \\ \hline
+	Average water consumption for past few months & Single & 4 bytes & must be a value greater than 0 & 322.533 & \\ \hline
+\end{tabular}
+\end{center}
 \subsubsection{Volumetrics}
-
+Initially, the database should be able to hold a month's worth of data for water, electric and gas consumptions. However, it should also be able to expand to be able to store upto a year's worth of data for gas, water and electric consumptions along with averages and predictions.
 \section{Objectives}
 
 \subsection{General Objectives}
