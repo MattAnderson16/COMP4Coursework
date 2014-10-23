@@ -1,10 +1,11 @@
 \chapter{Analysis}
 
 \section{Introduction}
+\subsection{Client Identification}
 My chosen client is Michael Seamark; He is fairly experienced with working with computer systems and mainly uses a laptop to assist with his job and to surf the internet. However, he also uses an iPhone to check his emails and keep in contact with people through social networking sites.
 
 \subsection{Define the current system}
-Michael has requested that I produce a metering system which monitors gas, water and electricity consumption with several graphical outputs to represent the use and any possible savings with a way to convert between units. It should be able indicate the current cost for the consumption and predict future costs. Currently, Michael relies on the monthly bills to give him the information on his consumption of electricity, gas and water and then he has to work out any savings, calculate future costs and convert to other units if needed manually.
+Michael has requested that I produce a metering system which monitors gas, water and electricity consumption with several graphical outputs to represent the use and any possible savings with a way to convert between units. It should be able indicate the current cost for the consumption and predict future costs. Currently, Michael relies on the monthly bills to give him the information on his consumption of electricity, gas and water and then he has to work out any savings, calculate future costs and convert to other units if needed manually. To do these calculations, He gathers the consumption rates for gas and electricity and the prices for consumption of gas and electricity from the monthly bills.
 
 \subsection{Describe the problems}
 One problem with the current system that Michael is using is that he cannot get the consumption of gas or electricity until the end of the month which means that he cannot check the cost of what he has used until the end of the month in which case the cost could have gone up significantly. In addition to that, the method he has to work out current spendings and future savings is inefficient and more prone to mistakes because he is calculating it manually and therefore can get values wrong or misread values from the bill 
@@ -62,7 +63,7 @@ The proposed system will output average consumptions for gas, electricity and wa
 
 \subsubsection{Data sources and destinations}
 \begin{center}
-\begin{tabular}{|l|l|l|l|}
+\begin{tabular}{|l|l|p{4cm}|l|}
 	\hline
 	\textbf{Source} & \textbf{Data} & \textbf{Example Data} & \textbf{Destination} \\ \hline
 	Bill & Gas consumption data & Gas consumption for past month & Notebook \\ \hline
