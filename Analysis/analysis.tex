@@ -2,13 +2,13 @@
 
 \section{Introduction}
 \subsection{Client Identification}
-My chosen client is Michael Seamark; He is fairly experienced with working with computer systems and mainly uses a laptop to assist with his job and to surf the internet. However, he also uses an iPhone to check his emails and keep in contact with people through social networking sites.
+My chosen client is Michael Seamark; He is fairly experienced with working with computer systems and mainly uses a laptop to assist with his job and to surf the internet. However, he also uses an iPhone to check his emails and keep in contact with people through social networking sites. The reason he has requested that I create this system for him is mainly to save time as he usually doesn't have much time to calculate monthly spendings on gas and electricity or future costs.
 
 \subsection{Define the current system}
 Michael has requested that I produce a metering system which monitors gas, water and electricity consumption with several graphical outputs to represent the use and any possible savings with a way to convert between units. It should be able indicate the current cost for the consumption and predict future costs. Currently, Michael relies on the monthly bills to give him the information on his consumption of electricity, gas and water and then he has to work out any savings, calculate future costs and convert to other units if needed manually. To do these calculations, He gathers the consumption rates for gas and electricity and the prices for consumption of gas and electricity from the monthly bills.
 
 \subsection{Describe the problems}
-One problem with the current system that Michael is using is that he cannot get the consumption of gas or electricity until the end of the month which means that he cannot check the cost of what he has used until the end of the month in which case the cost could have gone up significantly. In addition to that, the method he has to work out current spendings and future savings is inefficient and more prone to mistakes because he is calculating it manually and therefore can get values wrong or misread values from the bill 
+One problem with the current system that Michael is using is that he cannot get the consumption of gas or electricity until the end of the month which means that he cannot check the cost of what he has used until the end of the month in which case the cost could have gone up significantly. In addition to that, the method he has to work out current spendings and future savings is inefficient and more prone to mistakes because he is calculating it manually and therefore can get values wrong or misread values from the bill. Furthermore, it can be very time consuming to calculate what is needed and michael is usually too busy to calculate everything is needed because of his job.
 
 \subsection{Section appendix}
 \subsubsection{Client Interview}
@@ -66,10 +66,12 @@ The proposed system will output average consumptions for gas, electricity and wa
 \begin{tabular}{|l|l|p{4cm}|l|}
 	\hline
 	\textbf{Source} & \textbf{Data} & \textbf{Example Data} & \textbf{Destination} \\ \hline
-	Bill & Gas consumption data & Gas consumption for past month & Notebook \\ \hline
-	Bill & Electricity consumption data & Electricity consumption for past month & Notebook \\ \hline
+	Bill & Gas consumption & 2123 kWh & Notebook \\ \hline
+	Bill & Electricity consumption & 2451 kWh & Notebook \\ \hline
 	Bill & Average price per unit for gas & 1.18 pounds/kWh & Notebook \\ \hline
  	Bill & Average price per unit for electricity & 1.34 pounds/kWh & Notebook \\ \hline
+	User & Amount of months for average total cost & 6 months & Notebook \\ \hline
+	User & Amount of months for predicted total spendature & 6 months & Notebook \\ \hline
 \end{tabular}
 \label{tab:Data sources and destinations for the current system}
 \end{center}
@@ -183,7 +185,7 @@ The proposed system will output average consumptions for gas, electricity and wa
 \end{algorithmic}
 \end{algorithm}
 
-\subsubsection{Data flow diagram}
+\subsubsection{Data flow diagrams}
 \begin{figure}[H]
     \includegraphics[width=\textwidth]{./dataflowdiagrams1.png}
     \caption{data flow diagrams for current system} \label{fig:dataflowdiagrams}
@@ -194,9 +196,14 @@ The proposed system will output average consumptions for gas, electricity and wa
     \caption{data flow diagrams for current system} \label{fig:dataflowdiagrams}
 \end{figure}
 
+\begin{figure}[H]
+    \includegraphics[width=\textwidth]{./dataflowdiagrams2_5.png}
+    \caption{data flow diagrams for current system} \label{fig:dataflowdiagrams}
+\end{figure}
+
 \subsubsection{Input Forms, Output Forms, Report Formats}
 \begin{figure}[H]
-    \includegraphics[width=\textwidth]{./maths.png}
+    \includegraphics[width=\textwidth]{./untitled.png}
     \caption{calculations for the price of one month, the average price for 6 months and a prediction for the next month} \label{fig:calculations}
 \end{figure}
 \subsection{The proposed system}
@@ -206,12 +213,22 @@ The proposed system will output average consumptions for gas, electricity and wa
 \begin{tabular}{|l|l|l|l|}
 	\hline
 	\textbf{Source} & \textbf{Data} & \textbf{Example Data} & \textbf{Destination} \\ \hline
-	gas meter & gas consumption data & gas consumption & database \\ \hline
- 	electricity meter & electric consumption data & electric consumption & database \\ \hline
-	water meter & water consumption data & water consumption & database \\ \hline
+	User input & Gas consumption for past month & 2245 kWh & database \\ \hline
+ 	User input & Electricity consumption for past month & 3472 kWh & database \\ \hline
+	User input & Water consumption for past month & 562 l & database \\ \hline
+	User input & Gas consumption price for past month & 114 pounds & database \\ \hline
+ 	User input & Electricity consumption price for past month & 107 pounds & database \\ \hline
+	User input & Water consumption price for past month & 93 pounds l & database \\ \hline
 	User input & Average price per unit for gas & 1.18 pounds/kWh & database \\ \hline
  	User input & Average price per unit for electricity & 1.34 pounds/kWh & database \\ \hline
 	User input & Average price per unit for water & 1.25 pounds/litre & database \\ \hline
+	Calculation & Average gas consumption & 2532 kWh/month & database \\ \hline
+	Calculation & Average Electricity consumption & 3227 kWh/month& database \\ \hline
+	Calculation & Average water consumption & 654 l/month & database \\ \hline
+	Calculation & Average gas consumption price & 116 pounds/month & database \\ \hline
+	Calculation & Average Electricity consumption price & 105 pounds/month & database \\ \hline
+	Calculation & Average water consumption price & 97 pounds/month & database \\ \hline
+	
 \end{tabular}
 \label{tab:Data sources and destinations for the proposed system}
 \end{center}
@@ -229,7 +246,7 @@ The proposed system will output average consumptions for gas, electricity and wa
 
 \subsubsection{Data dictionary}
 \begin{center}
-\begin{tabular}{|p{3cm}|p{1cm}|p{1.5cm}|p{3cm}|p{2cm}|p{3.5cm}|}
+\begin{tabular}{|p{4.3cm}|p{1cm}|p{1.5cm}|p{3cm}|p{1.5cm}|p{2.5cm}|}
 	\hline
 	\textbf{name} & \textbf{data type} & \textbf{length} & \textbf{validation} & \textbf{example data} & \textbf{comment} \\ \hline
 	GasID & Integer & 1 - 255 & must be between 1 and 255 & 23 &  \\ \hline
@@ -238,19 +255,19 @@ The proposed system will output average consumptions for gas, electricity and wa
 	GasConsumption & Double & 1-9000 & must be greater than 0 & 256.743 & value can be in multiple units \\ \hline
 	ElectricConsumption & Double & 1-9000 & must be greater than 0 & 452.534 &  \\ \hline
 	WaterConsumption & Double & 1-9000 & must be greater than 0 & 537.322 &  \\ \hline
-	GasCostPernit & Double & 0-10 & must be between 0 and 10 & 1.53 & value is in pounds \\ \hline
+	GasCostPerUnit & Double & 0-10 & must be between 0 and 10 & 1.53 & value is in pounds \\ \hline
 	ElectricCostPerUnit & Double & 0-10 & must be between 0 and 10 & 1.42 &  \\ \hline
 	WaterCostPerUnit & Double & 0-10 & must be between 0 and 10 & 1.42 &  \\ \hline
 	GasCostForLastMonth & Double & 0-1000 & must be greater than 0 & 532.533 & value is in pounds \\ \hline
 	ElectricCostForLastMonth & Double & 0-1000 & must be greater than 0 & 412.176 &  \\ \hline
 	WaterCostForLastMonth & Double & 0-1000 & must be greater than 0 & 164.865 &  \\ \hline
-	AverageGasConsumptionForPastMonths & Double & 0 - 9000 & must be a value greater than 0 & 211.431 & value can be in multiple units \\ \hline
-	AverageElectricConsumptionForPastMonths & Double & 0-9000 & must be a value greater than 0 & 542.134 &  \\ \hline
-	AverageWaterConsumptionForPastMonths & Double & 0-9000 & must be a value greater than 0 & 322.533 & \\ \hline
+	AverageGasConsumption & Double & 0 - 9000 & must be a value greater than 0 & 211.431 & value can be in multiple units \\ \hline
+	AverageElectricConsumption & Double & 0-9000 & must be a value greater than 0 & 542.134 &  \\ \hline
+	AverageWaterConsumption & Double & 0-9000 & must be a value greater than 0 & 322.533 & \\ \hline
 \end{tabular}
 \end{center}
 \subsubsection{Volumetrics}
-I have chose to use an initial size of 200 records. I have chose this amount because my client said he would like to be able to check an average cost for gas, water and electric consumption for the past year and this size will allow for individual records for each month for gas, electric and water consumption for 12 months. This is a good size because it will mean that there can be average checks for any amount of months upto 12 months and the size can be expanded later on if needed. It also means I will have space to store average consumption and price for gas, electricity and water, predicted costs and consumption for coming months for gas, electricity and water and an average price per unit for recent months for gas, electricity and water. Each record for gas, electricity and water will store the details for consumption, price and average cost per unit for that month. The records for average values for gas, electricity and water will store the details of the average cost or consumption per month and how many months this is for.
+I have chose to use an initial size of 150 records. I have chose this amount because my client said he would like to be able to check an average cost for gas, water and electric consumption for the past year (see question 4 of the interview) and this size will allow for individual records for each month for gas, electric and water consumption for 12 months. This is a good size because it will mean that there can be average checks for any amount of months upto 12 months and the size can be expanded later on if needed. It also means I will have space to store average consumption and price for gas, electricity and water, predicted costs and consumption for coming months for gas, electricity and water and an average price per unit for recent months for gas, electricity and water. Each record for gas, electricity and water will store the details for consumption, price and average cost per unit for that month. The records for average values for gas, electricity and water will store the details of the average cost or consumption per month and how many months this is for.
 
 The monthly records database will hold 4 data fields,with the 3 main data fields taking up 8 bytes of storage and the fourth taking up 1 byte, for each record for gas, electricity and water, which would equal a total of 108 data fields, along with an extra 3 data fields in the average values records for gas, electricity and water, two taking up 8 bytes of storage and the other field taking up 1 byte of storage. This means that the minimum amount of space needed for the database would be:
 
@@ -267,6 +284,9 @@ The general objectives for the proposed system are:
 \begin{itemize}
 	\item Clear and easy to use menu interface for selecting what to check
 	\item Clear and easy to use input and output structure for each of the consumption and price records
+	\item Quick to use system and do calculations
+	\item Accurate calculations and outputs
+	\item Gathers data at regular intervals
 \end{itemize}
 \subsection{Specific Objectives}
 \begin{itemize}
@@ -278,14 +298,14 @@ The general objectives for the proposed system are:
 \end{itemize}
 \subsection{Core Objectives}
 \begin{itemize}
-	\item working out averages for gas, electricity and water consumption
-	\item working out averages for gas, electricity and water consumption prices
-	\item working out predicted future costs for gas, electricity and water consumption
-	\item working out predicted future consumption rates for gas, electricity and water
+	\item Predictions and averages for gas, electricity and water consumption to be done for one month, six months and yearly intervals on request
+	\item Predictions and averages for gas, electricity and water consumption prices to be done for one month, six months and yearly intervals on request
 \end{itemize}
 \subsection{Other Objectives}
 \begin{itemize}
-	\item gas, electricity and water consumptions for each day to be added to the total for each month
+	\item real time gathering of gas, electricity and water consumtion
+	\item output consumption data and avaerage data into a range of units and in different output styles such as tables and graphs
+	\item automate the system as much as possible
 \end{itemize}
 \section{ER Diagrams and Descriptions}
 
@@ -295,15 +315,15 @@ The general objectives for the proposed system are:
     \caption{ER Diagrams for the proposed system} \label{fig:ER Diagrams}
 \end{figure}
 \subsection{Entity Descriptions}
-	GasMetering(\emph{GasID},Consumption, Price, PricePerUnit, UnitType)\\
-	ElectricityMetering(\emph{ElectricityID}, Consumption, Price, PricePerUnit)\\
-	WaterMetering(\emph{WaterID}, Consumption, Price, PricePerUnit)\\
-	AverageGasMetering(\emph{AverageGasID}, AverageConsumption, AveragePrice)\\
-	AverageElectricityMetering(\emph{AverageElectricityID}, AverageConsumption, AveragePrice)\\
-	AverageWaterMetering(\emph{AverageWaterID}, AverageConsumption, AveragePrice)\\
-	PredictedGasMetering(\emph{PredictedGasID}, PredictedConsumption, PredictedPrice)\\
-	PredictedElectricityMetering(\emph{PredictedElectricityID}, PredictedConsumption, PredictedPrice)\\
-	PredictedWaterMetering(\emph{PredictedWaterID}, PredictedConsumption, PredictedPrice)\\
+	GasMetering(<u>GasID</u>,Consumption, Price, PricePerUnit, UnitType)\\
+	ElectricityMetering(<u>ElectricityID</u>, Consumption, Price, PricePerUnit, UnitType)\\
+	WaterMetering(<u>WaterID</u>, Consumption, Price, PricePerUnit, UnitType)\\
+	AverageGasMetering(<u>AverageGasID</u>, AverageConsumption, AveragePrice)\\
+	AverageElectricityMetering(<u>AverageElectricityID</u>, AverageConsumption, AveragePrice)\\
+	AverageWaterMetering(<u>AverageWaterID</u>, AverageConsumption, AveragePrice)\\
+	PredictedGasMetering(<u>PredictedGasID</u>, PredictedConsumption, PredictedPrice)\\
+	PredictedElectricityMetering(<u>PredictedElectricityID</u>, PredictedConsumption, PredictedPrice)\\
+	PredictedWaterMetering(<u>PredictedWaterID</u>, PredictedConsumption, PredictedPrice)\\
 \section{Object Analysis}
 
 \subsection{Object Listing}
@@ -311,12 +331,7 @@ The general objectives for the proposed system are:
 	\item GasMetering
 	\item ElectricityMetering
 	\item WaterMetering
-	\item AverageGasMetering
-	\item AverageElectricityMetering
-	\item AverageWaterMetering
-	\item PredictedGasMetering
-	\item PredictedElectricityMetering
-	\item PredictedWaterMetering
+	\item MeteringSystem
 \end{itemize}
 \subsection{Relationship diagrams}
 \begin{figure}[H]
@@ -325,44 +340,12 @@ The general objectives for the proposed system are:
 \end{figure}
 \subsection{Class definitions}
 \begin{figure}[H]
-    \includegraphics[width=\textwidth]{./GasMetering.png}
+    \includegraphics[width=\textwidth]{./ClassDiagrams.png}
     \caption{Class Diagrams for the proposed system} \label{fig:GasMetering Class Diagram}
 \end{figure}
 \begin{figure}[H]
-    \includegraphics[width=\textwidth]{./ElectricityMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:ElectricityMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./WaterMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:WaterMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./MeteringSystem.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:MeteringSystem Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./PredictedGasMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:PredictedGasMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./PredictedElectricityMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:PredictedElectricityMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./PredictedWaterMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:PredictedWaterMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./AverageGasMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:AverageGasMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./AverageElectricityMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:AverageElectricityMetering Class Diagram}
-\end{figure}
-\begin{figure}[H]
-    \includegraphics[width=\textwidth]{./AverageWaterMetering.png}
-    \caption{Class Diagrams for the proposed system} \label{fig:AverageWaterMetering Class Diagram}
+    \includegraphics[width=\textwidth]{./ClassDiagrams2.png}
+    \caption{Class Diagrams for the proposed system} \label{fig:GasMetering Class Diagram}
 \end{figure}
 \section{Other Abstractions and Graphs}
 
@@ -380,24 +363,24 @@ The main hardware specifications of this laptop are:
 The proposed system will not have a large impact on this hardware so running on my client's laptop is not too much of a problem.
 However, there are still a few hardware constraints that impact the proposed system. For example, the user interface has to be designed to work well on a display with a resolution of 1366x768 as that is the resolution of my client's laptop display and that the system will need to be able to do auto saves regularly as the laptop only has limited power available as it is powered by a battery which means that the laptop could shut down when the battery power gets too low and potentially cause data to be lost
 \subsection{Software}
-The proposed system will need to be designed to work on windows 8 as that is the operating system that my client uses on his laptop. In addition to that, my client has expressed that he is capable of installing any additional software on his laptop if required but he would prefer it if there isn't too much additional software required if any is at all.
+The proposed system will need to be designed to work on windows 8 as that is the operating system that my client uses on his laptop. In addition to that, my client has expressed that he is capable of installing any additional software on his laptop if required but he would prefer it if there isn't too much additional software required if any is at all. This means that the only constraint on additional software that may be required is the amount if any.
 \subsection{Time}
 My client has not expressed any dates for when he needs the system, so the only time constraint for this will be the deadline that has been set by my teacher which is 13th February.
 \subsection{User Knowledge}
-My client is fairly knowledgable with computers and is experienced in using many different types of software and understands IT terms which means this is not a serious constraint on the proposed system.
+My client is fairly knowledgable with computers and is experienced in using many different types of software and understands IT terms which means this is not a serious constraint on the proposed system. This means that there will not be an impact on how I need to design this system.
 \subsection{Access restrictions}
-This system will only be going onto my client's laptop which only he uses, so he will be the only person who can have access to this software. However, a password will still be implemented as the database will be storing financial data which my client would prefer to keep private and this will maximise the security of the system.
+This system will only be going onto my client's laptop which only he uses, so he will be the only person who can have access to this software. However, a password will still be implemented as the database will be storing financial data which my client would prefer to keep private and this will maximise the security of the system. In addition to that, I may use an encryption method to further increase the security of the data that is being stored
 \section{Limitations}
 
 \subsection{Areas which will not be included in computerisation}
 Gathering of the initial average price per unit for gas, electricity and water consumption will not be computerised as they can be gathered from the notepad and inputted into the system when needed.
 \subsection{Areas considered for future computerisation}
-In the future the average price per unit for gas, electricity and water consumption may be able to be computerised by working it out from the previous values that will be stored in the system from when the user inputs them.
+I currently plan to computerise as much as possible when first creating the program. This means that I will not have to computerise much more in the future if anything at all.
 \section{Solutions}
 
 \subsection{Alternative solutions}
 \begin{center}
-\begin{tabular}{|l|p{4.5cm}|p{4.5cm}|}
+\begin{tabular}{|p{2cm}|p{4.5cm}|p{4.5cm}|}
 	\hline
 	\textbf{Solution} & \textbf{Advantages} & \textbf{Disadvantages} \\ \hline
 	Spreadsheet & \begin{itemize} \item No extra software needed \item simple to use \end{itemize} & \begin{itemize} \item Can be difficult to implement \item available software may not be able to do everything the user needs \item security may not be as good as required \end{itemize} \\ \hline
