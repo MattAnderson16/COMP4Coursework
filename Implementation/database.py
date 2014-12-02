@@ -3,15 +3,16 @@ import sqlite3
 def create_table(database,table_name,sql):
     with sqlite3.connect(database) as db:
         cursor = db.cursor()
-#        PRAGMA(foreignkeys = on)
+        cursor.execute("PRAGMA foreign_keys = ON")
         cursor.execute("select name from sqlite_master where name=?",(table_name,))
         result = cursor.fetchall()
         keep_table = True
         if len(result) == 1:
-            response = input("The table {0} already exists, do you wish to recreate it? [Y/N]: ".format(table_name)).lower()
+            response = input("The table {0} already exists, do you wish to recreate it? [Y/N]: ".format(table_name))
+            response = response.lower()
             if response == "y":
                 keep_table = False
-                print("The table {0} will be recreated - all existing data will be lost.")
+                print("The table {0} will be recreated - all existing data will be lost.".format(table_name))
                 cursor.execute("drop table if exists {0}".format(table_name))
                 db.commit()
             else:
