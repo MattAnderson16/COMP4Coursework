@@ -65,10 +65,45 @@ The system will need to run on a laptop with a 1366x768 resolution screen with a
 \section{Database Design}
 
 \subsection{Normalisation}
+
+\subsubsection{ER Diagrams}
 \begin{figure}[H]
-\includegraphics{./design/UNF.png}
-\caption{UNF group}
+\includegraphics{./design/ER Diagrams.png}
+\caption{ER Diagram}
 \end{figure}
+
+\subsubsection{Entity Descriptions}
+ConsumptionReading(\underline{ConsumptionID},\emph{ConsumptionType},ConsumptionReading,ReadingDate)\\
+ConsumptionType(\underline{\emph{ConsumptionType}},\emph{ConsumptionCostID},ConsumptionTypeDescription)\\
+ConsumptionTypeInfo(\underline{ConsumptionType},ConsumptionTypeDescription)\\
+ConsumptionCost(\underline{ConsumptionCostID},ConsumptionCostPerUnit,ConsumptionCostStartDate)\\
+UserConsumption(\underline{ConsumptionID+UserID})\\
+User(\underline{UserID},FirstName, LastName, UserPassword)\\
+
+\subsubsection{1NF to 3NF}
+\begin{center}
+	\begin{tabular}{|p{4cm}|}
+		\hline
+		\textbf{UNF} \\ \hline
+		ConsumptionID \\ \hline
+		ConsumptionType \\ \hline
+		ConsumptionTypeDescription \\ \hline
+		ConsumptionCostPerUnit \\ \hline
+		ConsumptionCostStartDate \\ \hline
+		ConsumptionReading \\ \hline
+		ReadingDate \\ \hline
+		UserID \\ \hline
+		FirstName \\ \hline
+		LastName \\ \hline
+		UserPassword \\ \hline
+	\end{tabular}
+	
+	\begin{tabular}{|p{4.5cm}|p{4cm}}
+		\hline
+		\textbf{1NF} &  \\ \hline
+		Repeating & Non-repeating
+		\underline{ConsumptionID+UserID}
+			
 
 \begin{figure}[H]
 \includegraphics{./design/1NF.png}
@@ -84,13 +119,6 @@ The system will need to run on a laptop with a 1366x768 resolution screen with a
 \includegraphics{./design/3NF.png}
 \caption{2NF to 3NF}
 \end{figure}
-
-\subsubsection{ER Diagrams}
-
-\subsubsection{Entity Descriptions}
-
-\subsubsection{1NF to 3NF}
-
 
 \section{Security and Integrity of the System and Data}
 
