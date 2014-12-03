@@ -85,24 +85,38 @@ User(\underline{UserID},FirstName, LastName, UserPassword)\\
 	\begin{tabular}{|p{4cm}|}
 		\hline
 		\textbf{UNF} \\ \hline
-		ConsumptionID \\ \hline
-		ConsumptionType \\ \hline
-		ConsumptionTypeDescription \\ \hline
-		ConsumptionCostPerUnit \\ \hline
-		ConsumptionCostStartDate \\ \hline
-		ConsumptionReading \\ \hline
-		ReadingDate \\ \hline
 		UserID \\ \hline
 		FirstName \\ \hline
 		LastName \\ \hline
 		UserPassword \\ \hline
+		ReadingID \\ \hline
+		ConsumptionReading \\ \hline
+		ReadingDate \\ \hline
+		ConsumptionType \\ \hline
+		ConsumptionTypeDescription \\ \hline
+		CostID \\ \hline
+		CostPerUnit \\ \hline
+		CostStartDate \\ \hline
 	\end{tabular}
 	
-	\begin{tabular}{|p{4.5cm}|p{4cm}}
+	\begin{tabular}{|p{4.5cm}|p{4cm}|}
 		\hline
 		\textbf{1NF} &  \\ \hline
 		Repeating & Non-repeating
-		\underline{ConsumptionID+UserID}
+		\underline{ReadingID-UserID} & \underline{UserID} \\ \hline
+		ReadingDate & FirstName \\ \hline
+		ConsumptionReading & LastName\\ \hline
+		ConsumptionType & UserPassword \\ \hline
+		ConsumptionTypeDescription & \\ \hline
+		CostID & \\ \hline
+		CostPerUnit & \\ \hline
+		CostStartDate & \\ \hline
+	\end{tabular}
+
+	\begin{tabular}{|p{4.5cm}|p{4cm}|}
+		\hline
+		\textbf{2nf} & \\ \hline
+		
 			
 
 \begin{figure}[H]
