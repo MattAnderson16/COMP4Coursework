@@ -1,6 +1,11 @@
 from create_database import *
+from edit_type_table import *
+from edit_record_table import *
+from edit_user_table import *
+from edit_cost_table import *
 
 def display_menu():
+    print()
     print("Main Menu")
     print()
     print("1. (Re)Create database")
@@ -23,22 +28,24 @@ def get_menu_choice():
         create_typecost_table(database)
 
     elif choice == "2":
-        pass
+        get_type_menu_choice(database)
 
     elif choice == "3":
-        pass
+        get_reading_menu_choice(database)
 
     elif choice == "4":
-        pass
+        get_user_menu_choice(database)
 
     elif choice == "5":
-        pass
+        get_cost_menu_choice(database)
 
     elif choice == "0":
         Quit = True
+        return Quit
 
 if __name__ == "__main__":
     database = "ConsumptionMeteringSystem.db"
     Quit = False
     while not Quit:
-        get_menu_choice()
+        Quit = get_menu_choice()
+        

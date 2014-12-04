@@ -38,7 +38,7 @@ def create_reading_table(database):
              ConsumptionReading real,
              ReadingDate text,
              TypeID integer,
-             primary key(ConsumptionReading)
+             primary key(ReadingID)
              foreign key(TypeID) references Type(TypeID))"""
     create_table(database,sql,"Reading")
 
