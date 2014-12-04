@@ -7,11 +7,11 @@
 \begin{itemize}
 \item{User Interface}
 \item{Graphs and Charts}
-\item{Add and remove data}
+\item{Database control}
 \end{itemize}
 User Interface:
 \begin{itemize}
-\item{The user will be presented with an interface which has two text boxes for the username and password. These details will be unique and should only be known by the user they pertain to.}
+\item{The user will be presented with an interface which has two text boxes for the username and password and a button to proceed once they have entered their login details. These details will be unique and should only be known by the user they pertain to.}
 \item{Once logged in to the system, the user will be presented with a new interface in which they can load a database and access the different functionalities of the system such as inputting readings from the meters into the system to be stored in the database, viewing calculated averages and future prices and viewing consumption rates for the current month and any previous months in different formats and graphs/charts.}
 \item{The user will be able to navigate the different tabs of the interface via keyboard input or through tab buttons on a toolbar on the system}
 \end{itemize}
@@ -22,11 +22,11 @@ Graphs and Charts:
 \item{There will be 3 of each type of chart/graph for Gas, Electricity and Water Consumption, with each set of charts/graphs on a tab.}
 \end{itemize}
 
-Add and remove data:
+Database control:
 \begin{itemize}
-\item{On the main menubar and toolbar there will be options to open to close a database, format the database  or create a new one along with options to add or remove items from the database each with icons to represent them for ease of access}
-\item{In addition to these buttons, there will be added functionality for keyboard shortcuts toformake using the system as quick as possible}
-\item{If the user chooses to add data then they will be taken to an interface which asks what the data is and if relevant, which consumption type it refers to and then the system will choose the table depending on what type of data the user specified and take the user to a new interface in which they can input the data they wish to add and submit it to the database.}
+\item{On the menu bar and toolbar there will be options to open to close a database, format the database  or create a new one along with options to add or remove items from the database each with icons to represent them for ease of access}
+\item{In addition to these buttons, there will be added functionality for keyboard shortcuts to make using the system as quick as possible}
+\item{If the user chooses to add data then they will be taken to an interface which asks what table the data is for and if relevant, which consumption type it refers to and then the system will take the user to a new interface in which they can input the data they wish to add and submit it to the database.}
 \item{If the user chooses to remove data from the database, they will be taken to a similar interface to the one for the input interface and will be asked to specify what this data pertains to and then provide a date and consumption type if relevent.}
 \item{If the user chooses to format the database then they will be taken to a new interface which asks them if they are sure that they want to format the database and will have two buttons for confirmation}
 \item{If the user chooses to create a new database, they will be taken to another interface where they will be prompted to input a name for the new database and the interface will also contain a button which when pressed prompts the user to find the location on their computer to store the new database}
@@ -35,6 +35,10 @@ Add and remove data:
 \subsection{System flowcharts showing an overview of the complete system}
 
 \section{User Interface Designs}
+\begin{figure}[H]
+\includegraphics{./design/User Interface Design.png}
+\caption{User Interface Design}
+\end{figure}
 
 \section{Hardware Specification}
 The system will need to run on a laptop with a 1366x768 resolution screen with a 16:9  aspect ratio and running Windows 8. This is significant because it means I need to make sure the program will fit to this screen. A mouse will be srequired to navigate the program and select any inputs from drop down menus and a keyboard will be required to input data into text boxes on the program. The database for the program will be stored on a 1tb internal hard drive.
@@ -73,16 +77,16 @@ The system will need to run on a laptop with a 1366x768 resolution screen with a
 \end{figure}
 
 \subsubsection{Entity Descriptions}
-ConsumptionReading(\underline{ConsumptionID},\emph{ConsumptionType},ConsumptionReading,ReadingDate)\\
-ConsumptionType(\underline{\emph{ConsumptionType}},\emph{ConsumptionCostID},ConsumptionTypeDescription)\\
-ConsumptionTypeInfo(\underline{ConsumptionType},ConsumptionTypeDescription)\\
-ConsumptionCost(\underline{ConsumptionCostID},ConsumptionCostPerUnit,ConsumptionCostStartDate)\\
-UserConsumption(\underline{ConsumptionID+UserID})\\
-User(\underline{UserID},FirstName, LastName, UserPassword)\\
+Type(\underline{TypeID}, ConsumptionType,ConsumptionTypeDescription) \\
+Reading(\underline{ReadingID},ConsumptionReading,ReadingDate,\emph{ConsumptionType}) \\
+UserReading(\underline{UserReadingID},\emph{UserID},\emph{ReadingID}) \\
+User(\underline{UserID},FirstName,LastName,UserPassword) \\
+Cost(\underline{CostID},CostPerUnit,CostStartDate) \\
+TypeCost(\underline{TypeCostID},\emph{CostID},\emph{ConsumptionType})\\
 
 \subsubsection{1NF to 3NF}
 \begin{center}
-	\begin{tabular}{|p{4cm}|}
+	\begin{tabular}{|p{5cm}|}
 		\hline
 		\textbf{UNF} \\ \hline
 		UserID \\ \hline
@@ -99,11 +103,11 @@ User(\underline{UserID},FirstName, LastName, UserPassword)\\
 		CostStartDate \\ \hline
 	\end{tabular}
 	
-	\begin{tabular}{|p{4.5cm}|p{4cm}|}
+	\begin{tabular}{|p{5cm}|p{3.5cm}|}
 		\hline
 		\textbf{1NF} &  \\ \hline
-		Repeating & Non-repeating
-		\underline{ReadingID-UserID} & \underline{UserID} \\ \hline
+		\textbf{Repeating} & \textbf{Non-repeating} \\ \hline
+		\underline{ReadingID} \underline{UserID} & \underline{UserID} \\ \hline
 		ReadingDate & FirstName \\ \hline
 		ConsumptionReading & LastName\\ \hline
 		ConsumptionType & UserPassword \\ \hline
@@ -113,26 +117,33 @@ User(\underline{UserID},FirstName, LastName, UserPassword)\\
 		CostStartDate & \\ \hline
 	\end{tabular}
 
-	\begin{tabular}{|p{4.5cm}|p{4cm}|}
+	\begin{tabular}{|p{5cm}|p{5cm}|p{3cm}|}
 		\hline
-		\textbf{2nf} & \\ \hline
-		
-			
+		& \textbf{2NF} & \\ \hline
+		\underline{ReadingID} \underline{UserID} & \underline{ReadingID} & \underline{UserID} \\ \hline
+		ConsumptionReading & ConsumptionType & FirstName \\ \hline
+		ReadingDate & ConsumptionTypeDescription & LastName \\ \hline
+		 & CostID & UserPassword \\ \hline
+		 & CostPerUnit & \\ \hline
+		 & CostStartDate & \\ \hline
+	\end{tabular}
 
-\begin{figure}[H]
-\includegraphics{./design/1NF.png}
-\caption{UNF to 1NF}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics{./design/2NF.png}
-\caption{1NF to 2NF}
-\end{figure}
-
-\begin{figure}[H]
-\includegraphics{./design/3NF.png}
-\caption{2NF to 3NF}
-\end{figure}
+	\begin{tabular}{|p{5cm}|p{4cm}|p{3.5cm}|}
+		\hline
+		 & \textbf{3NF} & \\ \hline
+		\textbf{Type} & \textbf{Reading} & \textbf{UserReading} \\ \hline
+		\underline{TypeID} & \underline{ReadingID} & \underline{UserReadingID} \\ \hline
+		ConsumptionType & ConsumptionReading & \emph{ReadingID} \\ \hline
+		ConsumptionTypeDescription & ReadingDate & \emph{UserID} \\ \hline
+		 & \emph{TypeID} & \\ \hline
+		 & & \\ \hline
+		\textbf{User} & \textbf{cost} & \textbf{TypeCost} \\ \hline
+		\underline{UserID} & \underline{CostID} & \underline{TypeCostID} \\ \hline
+		FirstName & CostPerUnit & \emph{CostID} \\ \hline
+		LastName & CostStartDate & \emph{TypeID} \\ \hline
+		UserPassword & & \\ \hline
+	\end{tabular}
+\end{center}
 
 \section{Security and Integrity of the System and Data}
 
