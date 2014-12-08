@@ -18,25 +18,41 @@ def get_cost_menu_choice(database):
         create_reading_table(database)
 
     elif choice == "2":
-        ID = input("What is the ID of the cost you would like to add? ")
         Cost = input("What is the price per unit? ")
         CostDate = input("What is the starting date of this price? ")
-        DataList = [(ID, Cost, CostDate)]
+        DataList = [(Cost, CostDate)]
         add_data(DataList,database)
 
     elif choice == "3":
+        Costs = get_data(database)
+        print("Available costs:")
+        for Cost in Costs:
+            print(Cost)
+        print()
         ID = input("What is the ID of the cost you would like to remove from the cost table? ")
         remove_data((ID,),database)
 
     elif choice == "4":
+        Costs = get_data(database)
+        print("Available costs:")
+        for Cost in Costs:
+            print(Cost)
+        print()
         ID = input("What is the ID of the cost you would like to change? ")
         Cost = input("What is the new price per unit? ")
         CostDate = input("What is the new starting date of this price? ")
         DataList = [(Cost,CostDate,ID)]
         update_data(DataList,database)
 
+def get_data(database):
+    with sqlite3.connect(database) as db:
+        cursor = db.cursor
+        cursor.execute("Select * from Cost")
+        Costs = cursor.fetchall()
+        return Costs
+
 def add_data(DataList,database):
-    sql = "insert into Cost(CostID,CostPerUnit,CostStartDate) values (?,?,?)"
+    sql = "insert into Cost(CostPerUnit,CostStartDate) values (?,?)"
     for record in DataList:
         query(sql,database,record)
 

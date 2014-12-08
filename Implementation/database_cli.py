@@ -1,6 +1,6 @@
 from create_database import *
 from edit_type_table import *
-from edit_record_table import *
+from edit_reading_table import *
 from edit_user_table import *
 from edit_cost_table import *
 

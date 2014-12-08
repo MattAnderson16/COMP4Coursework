@@ -18,25 +18,40 @@ def get_reading_menu_choice(database):
         create_reading_table(database)
 
     elif choice == "2":
-        ID = input("What is the ID of the reading you would like to add? ")
         Reading = input("What is the reading you would like to add? ")
         Date = input("What is the date of the reading? ")
-        DataList = [(ID, Reading, Date)]
+        DataList = [(Reading, Date)]
         add_data(DataList,database)
 
     elif choice == "3":
+        Readings = get_data(database)
+        print("Availabe readings:")
+        for Reading in Readings:
+            print(Reading)
+        print()
         ID = input("What is the ID of the data you would like to remove from the reading table? ")
         remove_data((ID,),database)
 
     elif choice == "4":
+        Readings = get_data(database)
+        print("Availabe readings:")
+        for Reading in Readings:
+            print(Reading)
         ID = input("What is the ID of the reading you would like to change? ")
         Data = input("What is the new reading you would like to add? ")
         Date = input("What is the new date of the reading? ")
         DataList = [(Data,Date,ID)]
         update_data(DataList,database)
 
+def get_data(database):
+    with sqlite3.connect(database) as db:
+        cursor = db.cursor()
+        cursor.execute("select * from Reading")
+        Readings = cursor.fetchall()
+        return Readings
+
 def add_data(DataList,database):
-    sql = "insert into Reading(ReadingID,ConsumptionReading,ReadingDate) values (?,?,?)"
+    sql = "insert into Reading(ConsumptionReading,ReadingDate) values (?,?)"
     for record in DataList:
         query(sql,database,record)
 
