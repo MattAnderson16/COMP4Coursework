@@ -2,7 +2,8 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 from PyQt4.QtSql import*
 
-from canvas_class import *
+from home_layout_class import *
+from bar_layout_class import *
 from sqlconnection_class import *
 from add_data_class import *
 
@@ -17,7 +18,6 @@ class MainWindow(QMainWindow):
 
         self.tabs = QTabWidget()
         self.menu_bar = QMenuBar()
-        self.tool_bar = QToolBar()
         self.status_bar = QStatusBar()
 
         self.database_menu = self.menu_bar.addMenu("Database")
@@ -28,19 +28,11 @@ class MainWindow(QMainWindow):
         self.add_data = self.database_menu.addAction("Add Data")
         self.remove_data = self.database_menu.addAction("Remove Data")
 
-        self.tool_bar.addAction(self.open_database)
-        self.tool_bar.addAction(self.close_database)
-        self.tool_bar.addAction(self.create_database)
-        self.tool_bar.addAction(self.format_database)
-        self.tool_bar.addAction(self.add_data)
-        self.tool_bar.addAction(self.remove_data)
-
         self.setMenuWidget(self.menu_bar)
-        self.addToolBar(self.tool_bar)
         self.setStatusBar(self.status_bar)
 
-        self.homeTab = QWidget()
-        self.tab3 = QWidget()
+        self.home_tab = QWidget()
+        self.bar_tab = QWidget()
         self.tab2 = QWidget()
         self.tab4 = QWidget()
         self.tab5 = QWidget()
@@ -48,10 +40,11 @@ class MainWindow(QMainWindow):
         self.tab7 = QWidget()
         self.tab8 = QWidget()
 
+        self.create_home_layout()
         self.create_bar_layout()
 
-        self.tabs.addTab(self.homeTab, "Home")
-        self.tabs.addTab(self.tab2, "Graph 1")
+        self.tabs.addTab(self.home_tab, "Home")
+        self.tabs.addTab(self.bar_tab, "Bar Chart")
         self.tabs.addTab(self.tab3, "Graph 2")
         self.tabs.addTab(self.tab4, "Graph 3")
         self.tabs.addTab(self.tab5, "Graph 4")
@@ -70,12 +63,15 @@ class MainWindow(QMainWindow):
         self.add_data.triggered.connect(self.insert_data)
         self.remove_data.triggered.connect(self.delete_data)
 
+    def create_home_layout(self):
+        if not hasattr(self,"home_layout"):
+            self.home_layout = HomeLayout()
+            self.home_tab.setLayout(self.home_layout)
+            
     def create_bar_layout(self):
         if not hasattr(self,"bar_layout"):
-            self.graph1_canvas = Canvas()
-            self.graph1_layout = QVBoxLayout()
-            self.graph1_layout.addWidget(self.graph1_canvas)
-            self.tab2.setLayout(self.graph1_layout)
+            self.bar_layout = bar_layout()
+            self.bar_tab.setLayout(self.bar_layout)
 
     def open_connection(self):
         self.status_bar.showMessage("Opening Database")
