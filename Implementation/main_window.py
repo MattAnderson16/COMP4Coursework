@@ -33,7 +33,7 @@ class MainWindow(QMainWindow):
 
         self.home_tab = QWidget()
         self.bar_tab = QWidget()
-        self.tab2 = QWidget()
+        self.tab3 = QWidget()
         self.tab4 = QWidget()
         self.tab5 = QWidget()
         self.tab6 = QWidget()
@@ -50,7 +50,7 @@ class MainWindow(QMainWindow):
         self.tabs.addTab(self.tab5, "Graph 4")
         self.tabs.addTab(self.tab6, "Graph 5")
         self.tabs.addTab(self.tab7, "Graph 6")
-        self.tabs.addTab(self.tab8, "Graph 8")
+        self.tabs.addTab(self.tab8, "Graph 7")
 
         self.tabs.setTabShape(QTabWidget.Rounded)
 
@@ -70,7 +70,7 @@ class MainWindow(QMainWindow):
             
     def create_bar_layout(self):
         if not hasattr(self,"bar_layout"):
-            self.bar_layout = bar_layout()
+            self.bar_layout = CreateBarLayout()
             self.bar_tab.setLayout(self.bar_layout)
 
     def open_connection(self):
@@ -101,8 +101,9 @@ class MainWindow(QMainWindow):
 
     def insert_data(self):
         if self.database_open == True:
-            self.addData = add_data()
-            self.addData
+            self.addData = AddData()
+            self.addData.show()
+            self.addData.raise_()
         else:
             self.status_bar.showMessage("There is no database currently open")
 
