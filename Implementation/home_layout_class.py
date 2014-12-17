@@ -4,10 +4,10 @@ from PyQt4.QtCore import *
 from home_tool_bar_class import *
 
 class HomeLayout(QVBoxLayout):
-    def __init__(self):
+    def __init__(self,database_open):
         super().__init__()
 
-        self.tool_bar = HomeToolBar()
+        self.tool_bar = HomeToolBar(database_open)
 
         self.first_name_label = QLabel("First Name:")
         self.first_name = QLabel("-First Name-")

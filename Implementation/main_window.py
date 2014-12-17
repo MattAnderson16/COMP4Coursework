@@ -6,6 +6,8 @@ from home_layout_class import *
 from bar_layout_class import *
 from sqlconnection_class import *
 from add_data_class import *
+from remove_data_class import *
+from format_database_class import *
 
 import sys
 
@@ -14,7 +16,11 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Consumption Metering System")
 
+        self.icon = QIcon("./icon.png")
+        self.setWindowIcon(self.icon)
+
         self.database_open = False
+        self.database = None
 
         self.tabs = QTabWidget()
         self.menu_bar = QMenuBar()
@@ -27,6 +33,7 @@ class MainWindow(QMainWindow):
         self.format_database = self.database_menu.addAction("Format Database")
         self.add_data = self.database_menu.addAction("Add Data")
         self.remove_data = self.database_menu.addAction("Remove Data")
+        self.edit_data = self.database_menu.addAction("Edit Data")
 
         self.setMenuWidget(self.menu_bar)
         self.setStatusBar(self.status_bar)
@@ -62,10 +69,11 @@ class MainWindow(QMainWindow):
         self.format_database.triggered.connect(self.clear_database)
         self.add_data.triggered.connect(self.insert_data)
         self.remove_data.triggered.connect(self.delete_data)
+        self.edit_data.triggered.connect(self.change_data)
 
     def create_home_layout(self):
         if not hasattr(self,"home_layout"):
-            self.home_layout = HomeLayout()
+            self.home_layout = HomeLayout(self.database_open)
             self.home_tab.setLayout(self.home_layout)
             
     def create_bar_layout(self):
@@ -97,19 +105,35 @@ class MainWindow(QMainWindow):
         pass
 
     def clear_database(self):
-        pass
+        if self.database_open == True:
+            if not hasattr(self,"FormatDatabase"):
+                self.FormatDatabase = FormatDatabase()
+            self.FormatDatabase.show()
+            self.FormatDatabase.raise_()
+        else:
+            self.status_bar.showMessage("There is no database currently open")
 
     def insert_data(self):
         if self.database_open == True:
-            self.addData = AddData()
-            self.addData.show()
-            self.addData.raise_()
+            if not hasattr(self,"AddData"):
+                self.AddData = AddData()
+            self.AddData.show()
+            self.AddData.raise_()
         else:
             self.status_bar.showMessage("There is no database currently open")
 
     def delete_data(self):
+        if self.database_open == True:
+            if not hasattr(self,"RemoveData"):
+                self.RemoveData = RemoveData()
+                self.RemoveData.show()
+                self.RemoveData.raise_()
+        else:
+            self.status_bar.showMessage("There is no database currently open")
+
+    def change_data(self):
         pass
-    
+            
 if __name__ == "__main__":
     application = QApplication(sys.argv)
     window = MainWindow()

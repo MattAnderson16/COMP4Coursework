@@ -27,11 +27,19 @@ class RemoveData(QMainWindow):
             self.data_table_text = QLabel("Data table:")
             self.data_type_text = QLabel("Data type:")
             self.data_selection_text = QLabel("Data:")
-            self.data_table_dropdown = QLabel("-drop down for data table selection-")
-            self.data_type_dropdown = QLabel("-drop down for data type selection-")
-            self.data_selection_dropdown = QLabel("-drop down for data selection-")
+            self.data_table_dropdown = QPushButton("None")
+            self.data_type_dropdown = QPushButton("None")
+            self.data_selection_dropdown = QPushButton("None")
             self.confirm_button = QPushButton("Confirm")
             self.back_button = QPushButton("Back")
+
+            self.data_table_dropdown_menu = QMenu()
+            self.data_type_dropdown_menu = QMenu()
+            self.data_selection_dropdown_menu = QMenu()
+
+            self.data_table_dropdown.setMenu(self.data_table_dropdown_menu)
+            self.data_type_dropdown.setMenu(self.data_type_dropdown_menu)
+            self.data_selection_dropdown.setMenu(self.data_selection_dropdown_menu)
 
             self.data_table_layout = QHBoxLayout()
             self.data_table_layout.addWidget(self.data_table_text)
@@ -60,6 +68,7 @@ class RemoveData(QMainWindow):
 
             self.confirm_button.clicked.connect(self.create_confirm_layout)
             self.back_button.clicked.connect(self.close)
+
         else:
             self.stacked_layout.setCurrentIndex(0)
 

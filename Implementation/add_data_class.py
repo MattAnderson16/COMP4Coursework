@@ -27,10 +27,16 @@ class AddData(QMainWindow):
         if not hasattr(self, "add_data_layout"):
             self.table_label = QLabel("Data Table:")
             self.type_label = QLabel("Consumption Type:")
-            self.select_table = QLabel("Drop down table selection")
-            self.select_type = QLabel("Drop down consumption type selection")
+            self.select_table = QPushButton("None")
+            self.select_type = QPushButton("None")
             self.proceed_button = QPushButton("Proceed")
             self.back_button = QPushButton("Back")
+
+            self.select_table_menu = QMenu()
+            self.select_type_menu = QMenu()
+            self.select_table.setMenu(self.select_table_menu)
+            self.select_type.setMenu(self.select_type_menu)
+
 
             self.selection_layout = QGridLayout()
             self.selection_layout.addWidget(self.table_label,1,1)
@@ -57,9 +63,14 @@ class AddData(QMainWindow):
     def create_new_data_layout(self):
         if not hasattr(self, "new_data_widget"):
             self.data_type_label = QLabel("Data type:")
-            self.select_data_type = QLabel("Drop down for data type selection")
+            self.select_data_type = QPushButton("None")
             self.data_label = QLabel("Data:")
-            self.data_box = QLineEdit()
+            self.data_selection = QPushButton("None")
+
+            self.select_data_type_menu = QMenu()
+            self.data_selection_menu = QMenu()
+            self.select_data_type.setMenu(self.select_data_type_menu)
+            self.data_selection.setMenu(self.data_selection_menu)
 
             self.confirm_button = QPushButton("Confirm")
             self.back_button_2 = QPushButton("Back")
@@ -68,7 +79,7 @@ class AddData(QMainWindow):
             self.input_layout.addWidget(self.data_type_label,1,1)
             self.input_layout.addWidget(self.select_data_type,1,2)
             self.input_layout.addWidget(self.data_label,2,1)
-            self.input_layout.addWidget(self.data_box,2,2)
+            self.input_layout.addWidget(self.data_selection,2,2)
 
             self.create_data_button_layout = QHBoxLayout()
             self.create_data_button_layout.addWidget(self.confirm_button)
