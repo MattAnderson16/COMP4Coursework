@@ -7,6 +7,9 @@ class RemoveData(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Remove Data")
+        
+        self.icon = QIcon('./icon.png')
+        self.setWindowIcon(self.icon)
 
         self.stacked_layout = QStackedLayout()
         self.create_remove_data_layout()
