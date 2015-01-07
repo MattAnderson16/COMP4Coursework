@@ -12,6 +12,8 @@ class EditData(QMainWindow):
         self.create_data_selection_layout()
         self.create_edit_data_layout()
         self.create_confirmation_layout()
+        self.edit_data_a
+        self.edit_data_b
 
         self.stacked_layout.addWidget(self.data_selection_widget)
         self.stacked_layout.addWidget(self.edit_data_widget)
@@ -80,7 +82,7 @@ class EditData(QMainWindow):
             self.confirm_button_a = QPushButton("Confirm")
             self.back_button_b = QPushButton("Back")
 
-            self.data_line_a_layout = QHboxLayout()
+            self.data_line_a_layout = QHBoxLayout()
             self.data_line_a_layout.addWidget(self.data_name_a)
             self.data_line_a_layout.addWidget(self.data_line_a)
             self.data_line_a_layout.addWidget(self.edit_line_a)
@@ -129,34 +131,66 @@ class EditData(QMainWindow):
         else:
             self.stacked_layout.setCurrentIndex(2)
 
-    def edit_line_a(self):
+    def edit_data_a(self):
         if not hasattr(self,"edit_line_a_layout"):
-            self.current_data = QLabel("Current Data:")
-            self.new_data =  QLabel("New Data:")
-            self.new_data_edit = QLineEdit()
+            self.current_data_a = QLabel("Current Data:")
+            self.new_data_a =  QLabel("New Data:")
+            self.new_data_edit_a = QLineEdit()
             self.confirm_button_c = QPushButton("Confirm")
             self.back_button_d = QPushButton("Back")
 
-            self.new_data_layout = QGridLayout()
-            self.new_data_layout.addWidget(self.current_data,1,1)
-            self.new_data_layout.addWidget(self.new_data,2,1)
-            self.new_data_layout.addWidget(self.data_line_a,1,2)
-            self.new_data_layout.addWidget(self.new_data_edit,2,2)
+            self.new_data_layout_a = QGridLayout()
+            self.new_data_layout_a.addWidget(self.current_data_a,1,1)
+            self.new_data_layout_a.addWidget(self.new_data_a,2,1)
+            self.new_data_layout_a.addWidget(self.data_line_a,1,2)
+            self.new_data_layout_a.addWidget(self.new_data_edit_a,2,2)
 
             self.button_layout_d = QHBoxLayout()
             self.button_layout_d.addWidget(self.confirm_button_c)
             self.button_layout_d.addWidget(self.back_button_d)
 
             self.edit_line_a_layout = QVBoxLayout()
-            self.edit_line_a_layout.addLayout(self.new_data_layout)
+            self.edit_line_a_layout.addLayout(self.new_data_layout_a)
             self.edit_line_a_layout.addLayout(self.button_layout_d)
 
             self.edit_line_a_widget = QWidget()
             self.edit_line_a_widget.setLayout(self.edit_line_a_layout)
 
             self.stacked_layout.addWidget(self.edit_line_a_widget)
-        self.stacked_layout.setIndex(4)
+
+            self.back_button_d.clicked.connect(self.create_edit_data_layout)
+        self.stacked_layout.setCurrentIndex(3)
         
+    def edit_data_b(self):
+        if not hasattr(self,"edit_line_a_layout"):
+            self.current_data_b = QLabel("Current Data:")
+            self.new_data_b =  QLabel("New Data:")
+            self.new_data_edit_b = QLineEdit()
+            self.confirm_button_c = QPushButton("Confirm")
+            self.back_button_d = QPushButton("Back")
+
+            self.new_data_layout_b = QGridLayout()
+            self.new_data_layout_b.addWidget(self.current_data_b,1,1)
+            self.new_data_layout_b.addWidget(self.new_data_b,2,1)
+            self.new_data_layout_b.addWidget(self.data_line_b,1,2)
+            self.new_data_layout_b.addWidget(self.new_data_edit_b,2,2)
+
+            self.button_layout_e = QHBoxLayout()
+            self.button_layout_e.addWidget(self.confirm_button_d)
+            self.button_layout_e.addWidget(self.back_button_e)
+
+            self.edit_line_b_layout = QVBoxLayout()
+            self.edit_line_b_layout.addLayout(self.new_data_layout_b)
+            self.edit_line_b_layout.addLayout(self.button_layout_e)
+
+            self.edit_line_b_widget = QWidget()
+            self.edit_line_b_widget.setLayout(self.edit_line_b_layout)
+
+            self.stacked_layout.addWidget(self.edit_line_b_widget)
+
+            self.back_button_e.clicked.connect(self.create_edit_data_layout)
+        self.stacked_layout.setCurrentIndex(4)
+
     def edit_data(self):
         pass
 

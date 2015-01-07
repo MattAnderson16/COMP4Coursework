@@ -1,12 +1,13 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from PyQt4.QtSql import *
 
 import sys
+import sqlite3
 
 class AddData(QMainWindow):
-    def __init__(self):
+    def __init__(self, db):
         super().__init__()
+        self.database = db
         self.setWindowTitle("Add Data")
         self.stacked_layout = QStackedLayout()
         
@@ -18,7 +19,6 @@ class AddData(QMainWindow):
 
         self.central_widget = QWidget()
         self.central_widget.setLayout(self.stacked_layout)
-
         self.setCentralWidget(self.central_widget)
 
         self.stacked_layout.setCurrentIndex(0)
@@ -37,6 +37,26 @@ class AddData(QMainWindow):
             self.select_table.setMenu(self.select_table_menu)
             self.select_type.setMenu(self.select_type_menu)
 
+            self.get_tables()
+            self.get_consumption_types()
+
+            self.consumption_a = self.consumption_types[0]
+            self.consumption_b = self.consumption_types[1]
+            self.consumption_c = self.consumption_types[2]
+
+            self.select_consumption_a = self.select_type_menu.addAction(self.consumption_a[0])
+            self.select_consumption_b = self.select_type_menu.addAction(self.consumption_b[0])
+            self.select_consumption_c = self.select_type_menu.addAction(self.consumption_c[0])
+
+            self.user_table = self.tables[0]
+            self.cost_table = self.tables[1]
+            self.type_table = self.tables[4]
+            self.reading_table = self.tables[5]
+
+            self.select_user_table = self.select_table_menu.addAction(self.user_table[0])
+            self.select_cost_table = self.select_table_menu.addAction(self.cost_table[0])
+            self.select_type_table = self.select_table_menu.addAction(self.type_table[0])
+            self.select_reading_table = self.select_table_menu.addAction(self.reading_table[0])
 
             self.selection_layout = QGridLayout()
             self.selection_layout.addWidget(self.table_label,1,1)
@@ -57,6 +77,15 @@ class AddData(QMainWindow):
 
             self.proceed_button.clicked.connect(self.create_new_data_layout)
             self.back_button.clicked.connect(self.close)
+            
+            self.select_consumption_a.triggered.connect(self.set_consumption_a)
+            self.select_consumption_b.triggered.connect(self.set_consumption_b)
+            self.select_consumption_c.triggered.connect(self.set_consumption_c)
+
+            self.select_user_table.triggered.connect(self.set_user_table)
+            self.select_cost_table.triggered.connect(self.set_cost_table)
+            self.select_type_table.triggered.connect(self.set_type_table)
+            self.select_reading_table.triggered.connect(self.set_reading_table)
         else:
             self.stacked_layout.setCurrentIndex(0)
 
@@ -94,4 +123,51 @@ class AddData(QMainWindow):
             self.back_button_2.clicked.connect(self.create_add_data_layout)
         else:   
             self.stacked_layout.setCurrentIndex(1)
-        
+
+    def get_tables(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+            self.tables = cursor.fetchall()
+
+    def get_consumption_types(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT ConsumptionType FROM Type")
+            self.consumption_types = cursor.fetchall()
+
+    def query(self,sql,data):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()
+
+    def set_type_a(self):
+        pass
+
+    def set_type_b(self):
+        pass
+
+    def set_type_c(self):
+        pass
+
+    def set_user_table(self):
+        pass
+
+    def set_cost_table(self):
+        pass
+
+    def set_type_table(self):
+        pass
+
+    def set_reading_table(self):
+        pass
+
+if __name__ == "__main__":
+    application = QApplication(sys.argv)
+    window = AddData("ConsumptionMeteringSystem.db")
+    window.show()
+    window.raise_()
+    application.exec_()
+    

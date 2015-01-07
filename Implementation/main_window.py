@@ -8,6 +8,7 @@ from sqlconnection_class import *
 from add_data_class import *
 from remove_data_class import *
 from format_database_class import *
+from edit_data_class import *
 
 import sys
 
@@ -89,6 +90,7 @@ class MainWindow(QMainWindow):
         if ok:
             self.status_bar.showMessage("Database opened successfully")
             self.database_open = True
+            self.database = Path
         else:
             self.status_bar.showMessage("Database failed to open")
             self.database_open = False
@@ -116,7 +118,7 @@ class MainWindow(QMainWindow):
     def insert_data(self):
         if self.database_open == True:
             if not hasattr(self,"AddData"):
-                self.AddData = AddData()
+                self.AddData = AddData(self.database)
             self.AddData.show()
             self.AddData.raise_()
         else:
