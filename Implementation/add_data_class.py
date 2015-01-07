@@ -8,6 +8,9 @@ class AddData(QMainWindow):
     def __init__(self, db):
         super().__init__()
         self.database = db
+        self.table = None
+        self.type = None
+        
         self.setWindowTitle("Add Data")
         self.stacked_layout = QStackedLayout()
         
@@ -47,6 +50,7 @@ class AddData(QMainWindow):
             self.select_consumption_a = self.select_type_menu.addAction(self.consumption_a[0])
             self.select_consumption_b = self.select_type_menu.addAction(self.consumption_b[0])
             self.select_consumption_c = self.select_type_menu.addAction(self.consumption_c[0])
+            self.select_consumption_none = self.select_type_menu.addAction("None")
 
             self.user_table = self.tables[0]
             self.cost_table = self.tables[1]
@@ -81,11 +85,13 @@ class AddData(QMainWindow):
             self.select_consumption_a.triggered.connect(self.set_consumption_a)
             self.select_consumption_b.triggered.connect(self.set_consumption_b)
             self.select_consumption_c.triggered.connect(self.set_consumption_c)
+            self.select_consumption_none.triggered.connect(self.set_consumption_none)
 
             self.select_user_table.triggered.connect(self.set_user_table)
             self.select_cost_table.triggered.connect(self.set_cost_table)
             self.select_type_table.triggered.connect(self.set_type_table)
             self.select_reading_table.triggered.connect(self.set_reading_table)
+            
         else:
             self.stacked_layout.setCurrentIndex(0)
 
@@ -94,12 +100,12 @@ class AddData(QMainWindow):
             self.data_type_label = QLabel("Data type:")
             self.select_data_type = QPushButton("None")
             self.data_label = QLabel("Data:")
-            self.data_selection = QPushButton("None")
+            self.data_input = QLineEdit()
 
             self.select_data_type_menu = QMenu()
-            self.data_selection_menu = QMenu()
             self.select_data_type.setMenu(self.select_data_type_menu)
-            self.data_selection.setMenu(self.data_selection_menu)
+
+            self.get_table_data()           
 
             self.confirm_button = QPushButton("Confirm")
             self.back_button_2 = QPushButton("Back")
@@ -108,7 +114,7 @@ class AddData(QMainWindow):
             self.input_layout.addWidget(self.data_type_label,1,1)
             self.input_layout.addWidget(self.select_data_type,1,2)
             self.input_layout.addWidget(self.data_label,2,1)
-            self.input_layout.addWidget(self.data_selection,2,2)
+            self.input_layout.addWidget(self.data_input,2,2)
 
             self.create_data_button_layout = QHBoxLayout()
             self.create_data_button_layout.addWidget(self.confirm_button)
@@ -130,6 +136,13 @@ class AddData(QMainWindow):
             cursor.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
             self.tables = cursor.fetchall()
 
+    def get_table_data(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA table_info({0})".format(self.table))
+            self.data_types = cursor.fetchall()
+        print(self.data_types)
+    
     def get_consumption_types(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
@@ -143,26 +156,43 @@ class AddData(QMainWindow):
             cursor.execute(sql,data)
             db.commit()
 
-    def set_type_a(self):
-        pass
+    def set_consumption_a(self):
+        self.select_type.setText(self.consumption_a[0])
+        self.type = self.consumption_a[0]
 
-    def set_type_b(self):
-        pass
+    def set_consumption_b(self):
+        self.select_type.setText(self.consumption_b[0])
+        self.type = self.consumption_b[0]
 
-    def set_type_c(self):
-        pass
+    def set_consumption_c(self):
+        self.select_type.setText(self.consumption_c[0])
+        self.type = self.consumption_c[0]
+
+    def set_consumption_none(self):
+        self.select_type.setText("None")
+        self.type = None
 
     def set_user_table(self):
-        pass
+        self.select_table.setText(self.user_table[0])
+        self.table = self.user_table[0]
+        self.set_consumption_none()
+        self.get_table_data()
 
     def set_cost_table(self):
-        pass
+        self.select_table.setText(self.cost_table[0])
+        self.table = self.cost_table[0]
+        self.get_table_data()
 
     def set_type_table(self):
-        pass
+        self.select_table.setText(self.type_table[0])
+        self.table = self.type_table[0]
+        self.set_consumption_none()
+        self.get_table_data()
 
     def set_reading_table(self):
-        pass
+        self.select_table.setText(self.reading_table[0])
+        self.table = self.reading_table[0]
+        self.get_table_data()
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)
