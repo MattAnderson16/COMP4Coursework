@@ -6,8 +6,11 @@ from remove_data_class import *
 from format_database_class import *
 
 class HomeToolBar(QToolBar):
-    def __init__(self,database_open):
+    def __init__(self,database_open,db):
         super().__init__()
+
+        self.database_open = database_open
+        self.database = db
         
         self.open_database = self.addAction("Open Database")
         self.close_database = self.addAction("Close Database")
@@ -22,8 +25,6 @@ class HomeToolBar(QToolBar):
         self.format_database.triggered.connect(self.clear_database)
         self.add_data.triggered.connect(self.insert_data)
         self.remove_data.triggered.connect(self.delete_data)
-
-        self.database_open = database_open
 
     def open_connection(self):
         pass
@@ -46,7 +47,7 @@ class HomeToolBar(QToolBar):
     def insert_data(self):
         if self.database_open == True:
             if not hasattr(self,"AddData"):
-                self.AddData = AddData()
+                self.AddData = AddData(self.database)
             self.AddData.show()
             self.AddData.raise_()
         else:

@@ -20,8 +20,8 @@ class MainWindow(QMainWindow):
         self.icon = QIcon("./icon.png")
         self.setWindowIcon(self.icon)
 
-        self.database_open = False
-        self.database = None
+        self.database_open = True
+        self.database = "ConsumptionMeteringSystem.db"
 
         self.tabs = QTabWidget()
         self.menu_bar = QMenuBar()
@@ -74,7 +74,7 @@ class MainWindow(QMainWindow):
 
     def create_home_layout(self):
         if not hasattr(self,"home_layout"):
-            self.home_layout = HomeLayout(self.database_open)
+            self.home_layout = HomeLayout(self.database_open,self.database)
             self.home_tab.setLayout(self.home_layout)
             
     def create_bar_layout(self):
@@ -91,6 +91,8 @@ class MainWindow(QMainWindow):
             self.status_bar.showMessage("Database opened successfully")
             self.database_open = True
             self.database = Path
+            self.home_layout.tool_bar.database_open = self.database_open
+            self.home_layout.tool_bar.database = database
         else:
             self.status_bar.showMessage("Database failed to open")
             self.database_open = False
