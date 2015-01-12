@@ -30,17 +30,23 @@ class AddData(QMainWindow):
             self.table_label = QLabel("Data Table:")
             self.type_label = QLabel("Consumption Type:")
             self.data_type_label = QLabel("Data Type:")
-            self.data_label = QLabel("Data:")
+            self.data_label_a = QLabel("Data A:")
+            self.data_label_b = QLabel("Data B:")
+            self.data_label_c = QLabel("Data C:")
             self.select_table = QComboBox()
             self.select_consumption_type = QComboBox()
             self.select_data_type = QComboBox()
-            self.data_input = QLineEdit()
+            self.data_input_a = QLineEdit()
+            self.data_input_b = QLineEdit()
+            self.data_input_c = QLineEdit()
             self.proceed_button = QPushButton("Proceed")
             self.back_button = QPushButton("Back")
 
             self.select_consumption_type.setEnabled(False)
             self.select_data_type.setEnabled(False)
-            self.data_input.setEnabled(False)
+            self.data_input_a.setEnabled(False)
+            self.data_input_b.setEnabled(False)
+            self.data_input_c.setEnabled(False)
             
             self.get_tables()
             self.get_consumption_types()
@@ -74,11 +80,20 @@ class AddData(QMainWindow):
             self.selection_layout.addWidget(self.select_table,1,2)
             self.selection_layout.addWidget(self.select_consumption_type,2,2)
 
-            self.input_layout = QGridLayout()
-            self.input_layout.addWidget(self.data_type_label,1,1)
-            self.input_layout.addWidget(self.select_data_type,1,2)
-            self.input_layout.addWidget(self.data_label,2,1)
-            self.input_layout.addWidget(self.data_input,2,2)
+            self.input_layout = QHBoxLayout()
+            self.input_layout.addWidget(self.data_type_label)
+            self.input_layout.addWidget(self.select_data_type)
+
+            self.data_layout_a = QHBoxLayout()
+            self.data_layout_a.addWidget(self.data_label_a)
+            self.data_layout_a.addWidget(self.data_input_a)
+
+            self.data_layout_b = QHBoxLayout()
+            self.data_layout_b.addWidget(self.data_label_b)
+            self.data_layout_b.addWidget(self.data_input_b)
+
+            self.data_layout_c = QHBoxLayout()
+            
 
             self.button_layout = QHBoxLayout()
             self.button_layout.addWidget(self.proceed_button)
@@ -87,6 +102,7 @@ class AddData(QMainWindow):
             self.add_data_layout = QVBoxLayout()
             self.add_data_layout.addLayout(self.selection_layout)
             self.add_data_layout.addLayout(self.input_layout)
+            self.add_data_layout.addLayout(self.data_layout_a)
             self.add_data_layout.addLayout(self.button_layout)
             
             self.add_data_widget = QWidget()
@@ -108,7 +124,7 @@ class AddData(QMainWindow):
             else:
                 self.select_consumption_type.setEnabled(True)
             self.select_data_type.setEnabled(True)
-            self.data_input.setEnabled(True)
+            self.data_input_a.setEnabled(True)
             self.get_table_data(table)
 
             self.select_data_type.clear()
@@ -119,21 +135,21 @@ class AddData(QMainWindow):
         else:
             self.select_consumption_type.setEnabled(False)
             self.select_data_type.setEnabled(False)
-            self.data_input.setEnabled(False)
+            self.data_input_a.setEnabled(False)
 
     def update_data_input(self):
         data_type = self.select_data_type.currentText()
 
-        self.data_input.clear()
+        self.data_input_a.clear()
 
         if data_type !="" and data_type !="None":
-            self.data_input.setEnabled(True)
+            self.data_input_a.setEnabled(True)
             if "Name" in data_type:
-                self.data_input.setMaxLength(20)
+                self.data_input_a.setMaxLength(20)
             elif "Password" in data_type:
-                self.data_input.setMaxLength(16)
+                self.data_input_a.setMaxLength(16)
             else:
-                self.data_input.setMaxLength(10)
+                self.data_input_a.setMaxLength(10)
         else:
             self.data_input.setEnabled(False)
 
@@ -156,12 +172,12 @@ class AddData(QMainWindow):
             self.consumption_types = cursor.fetchall()
 
     def check_data(self):
-        if self.data_input.isEnabled():
-            text = self.data_input.text()
-            if text != "":
+        if self.data_input_a.isEnabled():
+            text_a = self.data_input_a.text()
+            if text_a != "":
                 data_type = self.select_data_type.currentText()
                 table = self.select_table.currentText()
-                self.add_data(text,data_type,table)
+                self.add_data(text_a,data_type,table)
 
     def add_data(self,text,data_type,table):
         sql = "insert into {0}({1}) values (?)".format(table,data_type)
