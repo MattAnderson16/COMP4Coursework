@@ -4,10 +4,12 @@ from PyQt4.QtCore import *
 import sys
 
 class EditData(QMainWindow):
-    def __init__(self):
+    def __init__(self,db):
         super().__init__()
         self.setWindowTitle("Edit Data")
         self.stacked_layout = QStackedLayout()
+
+        self.database = db
 
         self.create_data_selection_layout()
         self.create_edit_data_layout()

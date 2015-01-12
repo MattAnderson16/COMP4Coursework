@@ -10,6 +10,7 @@ class AddData(QMainWindow):
         self.database = db
         self.table = None
         self.type = None
+        self.status_bar = QStatusBar()
         
         self.setWindowTitle("Add Data")
 
@@ -30,42 +31,42 @@ class AddData(QMainWindow):
             self.type_label = QLabel("Consumption Type:")
             self.data_type_label = QLabel("Data Type:")
             self.data_label = QLabel("Data:")
-            self.select_table = QPushButton("None")
-            self.select_consumption_type = QPushButton("None")
-            self.select_data_type = QPushButton("None")
+            self.select_table = QComboBox()
+            self.select_consumption_type = QComboBox()
+            self.select_data_type = QComboBox()
             self.data_input = QLineEdit()
             self.proceed_button = QPushButton("Proceed")
             self.back_button = QPushButton("Back")
 
-            self.select_table_menu = QMenu()
-            self.select_consumption_type_menu = QMenu()
-            self.select_data_type_menu = QMenu()
-            self.select_table.setMenu(self.select_table_menu)
-            self.select_consumption_type.setMenu(self.select_consumption_type_menu)
-            self.select_data_type.setMenu(self.select_data_type_menu)
-
+            self.select_consumption_type.setEnabled(False)
+            self.select_data_type.setEnabled(False)
+            self.data_input.setEnabled(False)
+            
             self.get_tables()
             self.get_consumption_types()
-            self.get_table_data()
-
+            self.update_table_data()
+            
             self.consumption_a = self.consumption_types[0]
             self.consumption_b = self.consumption_types[1]
             self.consumption_c = self.consumption_types[2]
-
-            self.select_consumption_a = self.select_consumption_type_menu.addAction(self.consumption_a[0])
-            self.select_consumption_b = self.select_consumption_type_menu.addAction(self.consumption_b[0])
-            self.select_consumption_c = self.select_consumption_type_menu.addAction(self.consumption_c[0])
-            self.select_consumption_none = self.select_consumption_type_menu.addAction("None")
+            
+            self.select_consumption_type.addItem("None")
+            self.select_consumption_type.addItem(self.consumption_a[0])
+            self.select_consumption_type.addItem(self.consumption_b[0])
+            self.select_consumption_type.addItem(self.consumption_c[0])
 
             self.user_table = self.tables[0]
             self.cost_table = self.tables[1]
             self.type_table = self.tables[4]
             self.reading_table = self.tables[5]
+            
+            self.select_table.addItem("None")
+            self.select_table.addItem(self.user_table[0])
+            self.select_table.addItem(self.cost_table[0])
+            self.select_table.addItem(self.type_table[0])
+            self.select_table.addItem(self.reading_table[0])
 
-            self.select_user_table = self.select_table_menu.addAction(self.user_table[0])
-            self.select_cost_table = self.select_table_menu.addAction(self.cost_table[0])
-            self.select_type_table = self.select_table_menu.addAction(self.type_table[0])
-            self.select_reading_table = self.select_table_menu.addAction(self.reading_table[0])
+            self.select_data_type.addItem("None")
 
             self.selection_layout = QGridLayout()
             self.selection_layout.addWidget(self.table_label,1,1)
@@ -91,20 +92,50 @@ class AddData(QMainWindow):
             self.add_data_widget = QWidget()
             self.add_data_widget.setLayout(self.add_data_layout)
 
-            self.proceed_button.clicked.connect(self.add_data)
+            self.proceed_button.clicked.connect(self.check_data)
             self.back_button.clicked.connect(self.close)
-            
-            self.select_consumption_a.triggered.connect(self.set_consumption_a)
-            self.select_consumption_b.triggered.connect(self.set_consumption_b)
-            self.select_consumption_c.triggered.connect(self.set_consumption_c)
-            self.select_consumption_none.triggered.connect(self.set_consumption_none)
-
-            self.select_user_table.triggered.connect(self.set_user_table)
-            self.select_cost_table.triggered.connect(self.set_cost_table)
-            self.select_type_table.triggered.connect(self.set_type_table)
-            self.select_reading_table.triggered.connect(self.set_reading_table)           
+            self.select_table.activated.connect(self.update_table_data)
+            self.select_data_type.activated.connect(self.update_data_input)
         else:
             self.stacked_layout.setCurrentIndex(0)
+
+    def update_table_data(self):
+        table = self.select_table.currentText()
+        
+        if table != "" and table !="None":
+            if table == "User" or table == "Type":
+                self.select_consumption_type.setEnabled(False)
+            else:
+                self.select_consumption_type.setEnabled(True)
+            self.select_data_type.setEnabled(True)
+            self.data_input.setEnabled(True)
+            self.get_table_data(table)
+
+            self.select_data_type.clear()
+            self.select_data_type.addItem("None")
+            for item in self.data_types:
+                if "ID" not in item[1]:
+                    self.select_data_type.addItem(item[1])
+        else:
+            self.select_consumption_type.setEnabled(False)
+            self.select_data_type.setEnabled(False)
+            self.data_input.setEnabled(False)
+
+    def update_data_input(self):
+        data_type = self.select_data_type.currentText()
+
+        self.data_input.clear()
+
+        if data_type !="" and data_type !="None":
+            self.data_input.setEnabled(True)
+            if "Name" in data_type:
+                self.data_input.setMaxLength(20)
+            elif "Password" in data_type:
+                self.data_input.setMaxLength(16)
+            else:
+                self.data_input.setMaxLength(10)
+        else:
+            self.data_input.setEnabled(False)
 
     def get_tables(self):
         with sqlite3.connect(self.database) as db:
@@ -112,12 +143,11 @@ class AddData(QMainWindow):
             cursor.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
             self.tables = cursor.fetchall()
 
-    def get_table_data(self):
+    def get_table_data(self,table):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("PRAGMA table_info({0})".format(self.table))
+            cursor.execute("PRAGMA table_info({0})".format(table))
             self.data_types = cursor.fetchall()
-        print(self.data_types)
     
     def get_consumption_types(self):
         with sqlite3.connect(self.database) as db:
@@ -125,31 +155,25 @@ class AddData(QMainWindow):
             cursor.execute("SELECT ConsumptionType FROM Type")
             self.consumption_types = cursor.fetchall()
 
-    def add_data(self):
-        pass
-    
+    def check_data(self):
+        if self.data_input.isEnabled():
+            text = self.data_input.text()
+            if text != "":
+                data_type = self.select_data_type.currentText()
+                table = self.select_table.currentText()
+                self.add_data(text,data_type,table)
+
+    def add_data(self,text,data_type,table):
+        sql = "insert into {0}({1}) values (?)".format(table,data_type)
+        print(sql)
+        self.query(sql,str(text))
+        
     def query(self,sql,data):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
             cursor.execute("PRAGMA foreign_keys = ON")
-            cursor.execute(sql,data)
+            cursor.execute(sql,(data,))
             db.commit()
-
-    def set_consumption_a(self):
-        self.select_type.setText(self.consumption_a[0])
-        self.type = self.consumption_a[0]
-
-    def set_consumption_b(self):
-        self.select_type.setText(self.consumption_b[0])
-        self.type = self.consumption_b[0]
-
-    def set_consumption_c(self):
-        self.select_type.setText(self.consumption_c[0])
-        self.type = self.consumption_c[0]
-
-    def set_consumption_none(self):
-        self.select_consumption_type.setText("None")
-        self.type = None
 
     def set_user_table(self):
         self.select_table.setText(self.user_table[0])

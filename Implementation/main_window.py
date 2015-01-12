@@ -136,7 +136,9 @@ class MainWindow(QMainWindow):
             self.status_bar.showMessage("There is no database currently open")
 
     def change_data(self):
-        pass
+        if self.database_open == True:
+            if not hasattr(self,"EditData"):
+                self.EditData = EditData(self.database)
             
 if __name__ == "__main__":
     application = QApplication(sys.argv)
