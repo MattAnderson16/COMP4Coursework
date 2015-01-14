@@ -1,6 +1,11 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+from add_reading_class import *
+from edit_reading_class import *
+from remove_reading_class import *
+from add_user_class import *
+
 import sys
 
 class MainWindow(QMainWindow):
@@ -57,6 +62,69 @@ class MainWindow(QMainWindow):
         self.setMenuWidget(self.menu_bar)
         self.setStatusBar(self.status_bar)
 
+        self.add_electric.triggered.connect(self.add_electric_reading)
+        self.add_gas.triggered.connect(self.add_gas_reading)
+        self.add_water.triggered.connect(self.add_water_reading)
+
+        self.edit_electric.triggered.connect(self.edit_electric_reading)
+        self.edit_gas.triggered.connect(self.edit_gas_reading)
+        self.edit_water.triggered.connect(self.edit_water_reading)
+
+        self.new_profile.triggered.connect(self.new_user)
+        self.remove_electric.triggered.connect(self.remove_electric_reading)
+        self.remove_gas.triggered.connect(self.remove_gas_reading)
+        self.remove_water.triggered.connect(self.remove_water_reading)
+
+    def add_electric_reading(self):
+        self.insert_reading = AddReading("Electric")
+        self.insert_reading.show()
+        self.insert_reading.raise_()
+
+    def add_gas_reading(self):
+        self.insert_reading = AddReading("Gas")
+        self.insert_reading.show()
+        self.insert_reading.raise_()
+
+    def add_water_reading(self):
+        self.insert_reading = AddReading("Water")
+        self.insert_reading.show()
+        self.insert_reading.raise_()
+
+    def edit_electric_reading(self):
+        self.change_reading = EditReading("Electric")
+        self.change_reading.show()
+        self.change_reading.raise_()
+
+    def edit_gas_reading(self):
+        self.change_reading = EditReading("Gas")
+        self.change_reading.show()
+        self.change_reading.raise_()
+
+    def edit_water_reading(self):
+        self.change_reading = EditReading("Water")
+        self.change_reading.show()
+        self.change_reading.raise_()
+
+    def remove_electric_reading(self):
+        self.delete_reading = RemoveReading("Electric")
+        self.delete_reading.show()
+        self.delete_reading.raise_()
+
+    def remove_gas_reading(self):
+        self.delete_reading = RemoveReading("Gas")
+        self.delete_reading.show()
+        self.delete_reading.raise_()
+
+    def remove_water_reading(self):
+        self.delete_reading = RemoveReading("Gas")
+        self.delete_reading.show()
+        self.delete_reading.raise_()
+
+    def new_user(self):
+        self.new_user_window = NewProfile()
+        self.new_user_window.show()
+        self.new_user_window.raise_()
+        
 if __name__ == "__main__":
     application = QApplication(sys.argv)
     window = MainWindow()
