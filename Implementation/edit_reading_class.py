@@ -1,8 +1,6 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
-from edit_reading_class import *
-
 class EditReading(QMainWindow):
     def __init__(self,consumption_type):
         super().__init__()
