@@ -34,6 +34,35 @@ Database control:
 \end{itemize}
 
 \subsection{System flowcharts showing an overview of the complete system}
+\begin{figure}[H]
+\includegraphics{./design/flowchart 1.png}
+\caption{system flowchart}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{./design/flowchart 3.png}
+\caption{system flowchart}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{./design/flowchart 2.png}
+\caption{system flowchart}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{./design/flowchart 4.png}
+\caption{system flowchart}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{./design/flowchart 5.png}
+\caption{system flowchart}
+\end{figure}
+
+\begin{figure}[H]
+\includegraphics{./design/flowchart 6.png}
+\caption{system flowchart}
+\end{figure}
 
 \section{User Interface Designs}
 \begin{landscape}
@@ -42,6 +71,9 @@ Database control:
 \caption{User Interface Design}
 \end{figure}
 \end{landscape}
+Each of the add, edit and remove interfaces for the different sets of data will be similar to eachother but with their relevant input fields.
+
+I have chose to use a calendar interface to select the date rather than a basic text input as this adds to the ease of use of the system and makes the system look more professional
 
 \section{Hardware Specification}
 The system will need to run on a laptop with a 1366x768 resolution screen with a 16:9  aspect ratio and running Windows 8. This is significant because it means I need to make sure the program will fit to this screen. A mouse will be required to navigate the program and select any inputs from drop down menus and a keyboard will be required to input data into text boxes on the program. The database for the program will be stored on a 1tb internal hard drive. In addition to that, the program can't be too intensive as the laptop only has a 1.5 ghz intel celeron dual core processor.
@@ -342,7 +374,7 @@ To make sure the system is secure and to minimise corruption or tampering I will
 
 \section{Validation}
 \begin{center}
-    \begin{tabular}{|p{3cm}|p{5cm}|p{5cm}|}
+    \begin{tabular}{|p{3cm}|p{5cm}|p{8cm}|}
         \hline
         \textbf{Data} & \textbf{Validation} & \textbf{Why is it necessary?}\\ \hline
         UserID & Must be within a range of 0 to 4 digits and is unique & This is necessary because it is what is used to identify the user in the database and if two users have the same ID then this will cause problems within the database and sorting the users if needed \\ \hline
@@ -376,10 +408,10 @@ To make sure the system is secure and to minimise corruption or tampering I will
 \subsection{Detailed Plan}
 
 \begin{center}
-    \begin{longtable}{|p{1.5cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
+\begin{longtable}{|p{1.5cm}|p{2.5cm}|p{2.5cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|p{2cm}|}
         \hline
         \textbf{Test Series} & \textbf{Purpose of Test} & \textbf{Test Description} & \textbf{Test Data} & \textbf{Test Data Type (Normal/ Erroneous/ Boundary)} & \textbf{Expected Result} & \textbf{Actual Result} & \textbf{Evidence}\\ \hline
         Example & Example & Example & Example & Example & Example & Example & Example \\ \hline
-    \end{longtable}
+\end{longtable}
 \end{center}
 \end{landscape}
