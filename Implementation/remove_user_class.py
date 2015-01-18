@@ -10,17 +10,22 @@ class RemoveUser(QMainWindow):
         self.setCentralWidget(self.remove_user_widget)
 
     def create_remove_user_layout(self):
+        self.user_label = QLabel("Select User:")
         self.select_user = QComboBox()
 
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
+
+        self.select_user_layout = QHBoxLayout()
+        self.select_user_layout.addWidget(self.user_label)
+        self.select_user_layout.addWidget(self.select_user)
 
         self.button_layout = QHBoxLayout()
         self.button_layout.addWidget(self.back_button)
         self.button_layout.addWidget(self.confirm_button)
 
         self.remove_user_layout = QVBoxLayout()
-        self.remove_user_layout.addWidget(self.select_user)
+        self.remove_user_layout.addLayout(self.select_user_layout)
         self.remove_user_layout.addLayout(self.button_layout)
 
         self.remove_user_widget = QWidget()

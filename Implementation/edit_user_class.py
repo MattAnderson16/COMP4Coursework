@@ -11,6 +11,7 @@ class EditUser(QMainWindow):
         self.setCentralWidget(self.edit_user_widget)
 
     def create_edit_user_layout(self):
+        self.select_user_label = QLabel("User:")
         self.select_user = QComboBox()
 
         self.new_first_name_label = QLabel("New First Name:")
@@ -25,6 +26,10 @@ class EditUser(QMainWindow):
         
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
+
+        self.select_user_layout = QHBoxLayout()
+        self.select_user_layout.addWidget(self.select_user_label)
+        self.select_user_layout.addWidget(self.select_user)
 
         self.new_first_name_layout = QHBoxLayout()
         self.new_first_name_layout.addWidget(self.new_first_name_label)
@@ -43,6 +48,7 @@ class EditUser(QMainWindow):
         self.button_layout.addWidget(self.confirm_button)
 
         self.edit_user_layout = QVBoxLayout()
+        self.edit_user_layout.addLayout(self.select_user_layout)
         self.edit_user_layout.addLayout(self.new_first_name_layout)
         self.edit_user_layout.addLayout(self.new_last_name_layout)
         self.edit_user_layout.addLayout(self.new_password_layout)

@@ -2,11 +2,10 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
 class EditReading(QMainWindow):
-    def __init__(self,consumption_type):
+    def __init__(self):
         super().__init__()
 
-        self.setWindowTitle("Edit {0} reading".format(consumption_type))
-        self.consumption_type = consumption_type
+        self.setWindowTitle("Edit reading")
 
         self.create_edit_reading_layout()
 

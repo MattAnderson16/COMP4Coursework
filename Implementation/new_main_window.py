@@ -8,6 +8,11 @@ from add_user_class import *
 from edit_user_class import *
 from remove_user_class import *
 from add_cost_class import *
+from edit_cost_class import *
+from delete_cost_class import *
+from add_type_class import *
+from edit_type_class import *
+from delete_type_class import *
 
 import sys
 
@@ -34,21 +39,9 @@ class MainWindow(QMainWindow):
         self.remove_profile = self.profile_menu.addAction("Remove Profile")
         self.logout = self.profile_menu.addAction("Logout")
 
-        self.add_reading = self.reading_menu.addMenu("Add Reading")
-        self.edit_reading = self.reading_menu.addMenu("Edit Reading")
-        self.remove_reading = self.reading_menu.addMenu("Remove Reading")
-        
-        self.add_electric = self.add_reading.addAction("Add Electric Reading")
-        self.add_gas = self.add_reading.addAction("Add Gas Reading")
-        self.add_water = self.add_reading.addAction("Add Water Reading")
-        
-        self.edit_electric = self.edit_reading.addAction("Edit Electric Reading")
-        self.edit_gas = self.edit_reading.addAction("Edit Gas Reading")
-        self.edit_water = self.edit_reading.addAction("Edit Water Reading")
-        
-        self.remove_electric = self.remove_reading.addAction("Remove Electric Reading")
-        self.remove_gas = self.remove_reading.addAction("Remove Gas Reading")
-        self.remove_water = self.remove_reading.addAction("Remove Water Reading")
+        self.add_reading = self.reading_menu.addAction("Add Reading")
+        self.edit_reading = self.reading_menu.addAction("Edit Reading")
+        self.remove_reading = self.reading_menu.addAction("Remove Reading")
 
         self.cost_preferences = self.preferences_menu.addMenu("Costs")
         self.type_preferences = self.preferences_menu.addMenu("Types")
@@ -64,74 +57,40 @@ class MainWindow(QMainWindow):
         self.bar_chart = self.graphs_menu.addAction("Bar Chart")
         self.pie_chart = self.graphs_menu.addAction("Pie Chart")
         self.scatter_graph = self.graphs_menu.addAction("Scatter Graph")
-        self.graph_4 = self.graphs_menu.addAction("Graph 4")
-        self.graph_5 = self.graphs_menu.addAction("Graph 5")
+        self.graph_4 = self.graphs_menu.addAction("Line Graph")
+        self.graph_5 = self.graphs_menu.addAction("Table")
 
         self.setMenuWidget(self.menu_bar)
         self.setStatusBar(self.status_bar)
 
-        self.add_electric.triggered.connect(self.add_electric_reading)
-        self.add_gas.triggered.connect(self.add_gas_reading)
-        self.add_water.triggered.connect(self.add_water_reading)
-
-        self.edit_electric.triggered.connect(self.edit_electric_reading)
-        self.edit_gas.triggered.connect(self.edit_gas_reading)
-        self.edit_water.triggered.connect(self.edit_water_reading)
+        self.add_reading.triggered.connect(self.new_reading)
+        self.edit_reading.triggered.connect(self.modify_reading)
+        self.remove_reading.triggered.connect(self.clear_reading)
 
         self.new_profile.triggered.connect(self.new_user)
         self.edit_profile.triggered.connect(self.edit_user)
         self.remove_profile.triggered.connect(self.remove_user)
-        
-        self.remove_electric.triggered.connect(self.remove_electric_reading)
-        self.remove_gas.triggered.connect(self.remove_gas_reading)
-        self.remove_water.triggered.connect(self.remove_water_reading)
 
         self.add_cost.triggered.connect(self.insert_cost)
         self.edit_cost.triggered.connect(self.change_cost)
         self.remove_cost.triggered.connect(self.delete_cost)
 
-    def add_electric_reading(self):
-        self.insert_reading = AddReading("Electric")
+        self.add_type.triggered.connect(self.insert_type)
+        self.edit_type.triggered.connect(self.change_type)
+        self.remove_type.triggered.connect(self.delete_type)
+
+    def new_reading(self):
+        self.insert_reading = AddReading()
         self.insert_reading.show()
         self.insert_reading.raise_()
 
-    def add_gas_reading(self):
-        self.insert_reading = AddReading("Gas")
-        self.insert_reading.show()
-        self.insert_reading.raise_()
-
-    def add_water_reading(self):
-        self.insert_reading = AddReading("Water")
-        self.insert_reading.show()
-        self.insert_reading.raise_()
-
-    def edit_electric_reading(self):
-        self.change_reading = EditReading("Electric")
+    def modify_reading(self):
+        self.change_reading = EditReading()
         self.change_reading.show()
         self.change_reading.raise_()
 
-    def edit_gas_reading(self):
-        self.change_reading = EditReading("Gas")
-        self.change_reading.show()
-        self.change_reading.raise_()
-
-    def edit_water_reading(self):
-        self.change_reading = EditReading("Water")
-        self.change_reading.show()
-        self.change_reading.raise_()
-
-    def remove_electric_reading(self):
-        self.delete_reading = RemoveReading("Electric")
-        self.delete_reading.show()
-        self.delete_reading.raise_()
-
-    def remove_gas_reading(self):
-        self.delete_reading = RemoveReading("Gas")
-        self.delete_reading.show()
-        self.delete_reading.raise_()
-
-    def remove_water_reading(self):
-        self.delete_reading = RemoveReading("Gas")
+    def clear_reading(self):
+        self.delete_reading = RemoveReading()
         self.delete_reading.show()
         self.delete_reading.raise_()
 
@@ -156,10 +115,29 @@ class MainWindow(QMainWindow):
         self.add_cost_window.raise_()
 
     def change_cost(self):
-        pass
-
+        self.modify_cost_window = EditCost()
+        self.modify_cost_window.show()
+        self.modify_cost_window.raise_()
+        
     def delete_cost(self):
-        pass
+        self.delete_cost_window = DeleteCost()
+        self.delete_cost_window.show()
+        self.delete_cost_window.raise_()
+
+    def insert_type(self):
+        self.add_type_window = AddType()
+        self.add_type_window.show()
+        self.add_type_window.raise_()
+
+    def change_type(self):
+        self.edit_type_window = EditType()
+        self.edit_type_window.show()
+        self.edit_type_window.raise_()
+
+    def delete_type(self):
+        self.remove_type_window = DeleteType()
+        self.remove_type_window.show()
+        self.remove_type_window.raise_()
         
 if __name__ == "__main__":
     application = QApplication(sys.argv)
