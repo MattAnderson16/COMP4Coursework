@@ -9,6 +9,10 @@ class FormatDatabase(QMainWindow):
 
         self.setWindowTitle("Format Database")
 
+        self.create_format_database_layout()
+        self.setCentralWidget(self.format_database_widget)
+
+    def create_format_database_layout(self):
         self.warning = QLabel("Are you sure you want to format the database?")
         self.yes_button = QPushButton("Yes")
         self.no_button = QPushButton("No")
@@ -26,8 +30,6 @@ class FormatDatabase(QMainWindow):
 
         self.yes_button.clicked.connect(self.format_database)
         self.no_button.clicked.connect(self.close)
-
-        self.setCentralWidget(self.format_database_widget)
 
     def format_database(self):
         pass

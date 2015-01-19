@@ -1,6 +1,9 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
+from PyQt4.QtSql import *
 
+from sqlconnection_class import *
+from format_database_class import *
 from add_reading_class import *
 from edit_reading_class import *
 from remove_reading_class import *
@@ -13,6 +16,7 @@ from delete_cost_class import *
 from add_type_class import *
 from edit_type_class import *
 from delete_type_class import *
+from table_layout_class import *
 
 import sys
 
@@ -20,6 +24,15 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Consumption Metering System")
+
+        self.database_open = False
+        self.database = None
+
+        self.main_layout = QStackedLayout()
+        self.show_table()
+        
+        self.main_layout_widget = QWidget()
+        self.main_layout_widget.setLayout(self.main_layout)
 
         self.menu_bar = QMenuBar()
         self.status_bar = QStatusBar()
@@ -54,14 +67,18 @@ class MainWindow(QMainWindow):
         self.edit_type = self.type_preferences.addAction("Edit Type")
         self.remove_type = self.type_preferences.addAction("Remove Type")
 
-        self.bar_chart = self.graphs_menu.addAction("Bar Chart")
-        self.pie_chart = self.graphs_menu.addAction("Pie Chart")
-        self.scatter_graph = self.graphs_menu.addAction("Scatter Graph")
-        self.graph_4 = self.graphs_menu.addAction("Line Graph")
-        self.graph_5 = self.graphs_menu.addAction("Table")
+        self.display_bar_chart = self.graphs_menu.addAction("Bar Chart")
+        self.display_pie_chart = self.graphs_menu.addAction("Pie Chart")
+        self.display_scatter_graph = self.graphs_menu.addAction("Scatter Graph")
+        self.display_line_graph = self.graphs_menu.addAction("Line Graph")
+        self.display_table = self.graphs_menu.addAction("Table")
 
         self.setMenuWidget(self.menu_bar)
         self.setStatusBar(self.status_bar)
+
+        self.open_database.triggered.connect(self.open_connection)
+        self.close_database.triggered.connect(self.close_connection)
+        self.format_database.triggered.connect(self.clear_database)
 
         self.add_reading.triggered.connect(self.new_reading)
         self.edit_reading.triggered.connect(self.modify_reading)
@@ -79,66 +96,140 @@ class MainWindow(QMainWindow):
         self.edit_type.triggered.connect(self.change_type)
         self.remove_type.triggered.connect(self.delete_type)
 
+        self.display_table.triggered.connect(self.show_table)
+
+        self.setCentralWidget(self.main_layout_widget)
+
+    def open_connection(self):
+        Path = QFileDialog.getOpenFileName()
+        self.SQLConnection = SQLConnection(Path)
+        ok = self.SQLConnection.open_database()
+        if ok:
+            self.database_open = True
+            self.database = Path
+            self.status_bar.showMessage("Database successfully opened")
+            self.table_layout.update_results(self.database)
+        else:
+            self.database_open = False
+            self.status_bar.showMessage("Database failed to open")
+
+    def close_connection(self):
+        if self.database_open:
+            self.SQLConnection.close_database()
+            self.database = None
+            self.database_open = False
+        else:
+            self.status_bar.showMessage("There is no database currently open")
+
+    def clear_database(self):
+        if self.database_open:
+            self.format_database_window = FormatDatabase()
+            self.format_database_window.show()
+            self.format_database_window.raise_()
+        else:
+            self.status_bar.showMessage("There is no database currently open")
+
     def new_reading(self):
-        self.insert_reading = AddReading()
-        self.insert_reading.show()
-        self.insert_reading.raise_()
+        if self.database_open:
+            self.insert_reading = AddReading()
+            self.insert_reading.show()
+            self.insert_reading.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def modify_reading(self):
-        self.change_reading = EditReading()
-        self.change_reading.show()
-        self.change_reading.raise_()
+        if self.database_open:
+            self.change_reading = EditReading()
+            self.change_reading.show()
+            self.change_reading.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def clear_reading(self):
-        self.delete_reading = RemoveReading()
-        self.delete_reading.show()
-        self.delete_reading.raise_()
+        if self.database_open:
+            self.delete_reading = RemoveReading()
+            self.delete_reading.show()
+            self.delete_reading.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def new_user(self):
-        self.new_user_window = NewProfile()
-        self.new_user_window.show()
-        self.new_user_window.raise_()
+        if self.database_open:
+            self.new_user_window = NewProfile()
+            self.new_user_window.show()
+            self.new_user_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def edit_user(self):
-        self.edit_user_window = EditUser()
-        self.edit_user_window.show()
-        self.edit_user_window.raise_()
+        if self.database_open:
+            self.edit_user_window = EditUser()
+            self.edit_user_window.show()
+            self.edit_user_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def remove_user(self):
-        self.remove_user_window = RemoveUser()
-        self.remove_user_window.show()
-        self.remove_user_window.raise_()
+        if self.database_open:
+            self.remove_user_window = RemoveUser()
+            self.remove_user_window.show()
+            self.remove_user_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def insert_cost(self):
-        self.add_cost_window = AddCost()
-        self.add_cost_window.show()
-        self.add_cost_window.raise_()
+        if self.database_open:
+            self.add_cost_window = AddCost()
+            self.add_cost_window.show()
+            self.add_cost_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def change_cost(self):
-        self.modify_cost_window = EditCost()
-        self.modify_cost_window.show()
-        self.modify_cost_window.raise_()
-        
+        if self.database_open:
+            self.modify_cost_window = EditCost()
+            self.modify_cost_window.show()
+            self.modify_cost_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")        
     def delete_cost(self):
-        self.delete_cost_window = DeleteCost()
-        self.delete_cost_window.show()
-        self.delete_cost_window.raise_()
-
+        if self.database_open:
+            self.delete_cost_window = DeleteCost()
+            self.delete_cost_window.show()
+            self.delete_cost_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
     def insert_type(self):
-        self.add_type_window = AddType()
-        self.add_type_window.show()
-        self.add_type_window.raise_()
-
+        if self.database_open:
+            self.add_type_window = AddType()
+            self.add_type_window.show()
+            self.add_type_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
     def change_type(self):
-        self.edit_type_window = EditType()
-        self.edit_type_window.show()
-        self.edit_type_window.raise_()
+        if self.database_open:
+            self.edit_type_window = EditType()
+            self.edit_type_window.show()
+            self.edit_type_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
 
     def delete_type(self):
-        self.remove_type_window = DeleteType()
-        self.remove_type_window.show()
-        self.remove_type_window.raise_()
-        
+        if self.database_open:
+            self.remove_type_window = DeleteType()
+            self.remove_type_window.show()
+            self.remove_type_window.raise_()
+        else:
+            self.status_bar.showMessage("Database not open")
+
+    def show_table(self):
+        if not hasattr(self,"table_layout"):
+            self.table_layout = DisplayTable(self.database)
+            self.main_layout.addWidget(self.table_layout)
+        if self.database != None:
+            self.table_layout.update_results(self.database)
+        self.main_layout.setCurrentIndex(0)
+            
 if __name__ == "__main__":
     application = QApplication(sys.argv)
     window = MainWindow()
