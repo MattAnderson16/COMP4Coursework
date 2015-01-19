@@ -12,6 +12,7 @@ class EditReading(QMainWindow):
         self.setCentralWidget(self.edit_reading_widget)
 
     def create_edit_reading_layout(self):
+        self.select_reading_label = QLabel("Select Reading")
         self.select_reading = QComboBox()
 
         self.new_reading_label = QLabel("New Consumption Reading:")
@@ -22,6 +23,10 @@ class EditReading(QMainWindow):
 
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
+
+        self.select_reading_layout = QHBoxLayout()
+        self.select_reading_layout.addWidget(self.select_reading_label)
+        self.select_reading_layout.addWidget(self.select_reading)
 
         self.input_new_reading_layout = QGridLayout()
         self.input_new_reading_layout.addWidget(self.new_reading_label,1,1)
@@ -34,7 +39,7 @@ class EditReading(QMainWindow):
         self.button_layout.addWidget(self.confirm_button)
 
         self.edit_reading_layout = QVBoxLayout()
-        self.edit_reading_layout.addWidget(self.select_reading)
+        self.edit_reading_layout.addLayout(self.select_reading_layout)
         self.edit_reading_layout.addLayout(self.input_new_reading_layout)
         self.edit_reading_layout.addLayout(self.button_layout)
 

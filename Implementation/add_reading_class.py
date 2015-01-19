@@ -1,9 +1,13 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class AddReading(QMainWindow):
-    def __init__(self):
+    def __init__(self,db):
         super().__init__()
+
+        self.database = db
 
         self.setWindowTitle("Add Reading")
 
@@ -13,6 +17,8 @@ class AddReading(QMainWindow):
     def create_add_reading_layout(self):
         self.type_label = QLabel("Consumption Type:")
         self.select_type = QComboBox()
+
+        self.get_types()
         
         self.reading_label = QLabel("Consumption Reading:")
         self.reading_input = QLineEdit()
@@ -51,5 +57,19 @@ class AddReading(QMainWindow):
         self.confirm_button.clicked.connect(self.add_data)
         self.back_button.clicked.connect(self.close)
 
+    def get_types(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT ConsumptionType FROM Type")
+            self.consumption_types = cursor.fetchall()
+        for Type in self.consumption_types:
+            self.select_type.addItem(Type[0])
+        
     def add_data(self):
-        pass
+        Type = self.select_type.currentIndex()
+        Reading = self.reading_input.text()
+        Date = self.date_input.selectedDate().toPyDate()
+        #sql = "insert into Reading(ConsumptionReading, ReadingDate,TypeID) values (?,?,?)"
+        
+        
+        

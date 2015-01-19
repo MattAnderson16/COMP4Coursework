@@ -17,6 +17,7 @@ from add_type_class import *
 from edit_type_class import *
 from delete_type_class import *
 from table_layout_class import *
+from bar_widget_class import *
 
 import sys
 
@@ -30,6 +31,7 @@ class MainWindow(QMainWindow):
 
         self.main_layout = QStackedLayout()
         self.show_table()
+        self.show_bar_chart()
         
         self.main_layout_widget = QWidget()
         self.main_layout_widget.setLayout(self.main_layout)
@@ -97,8 +99,10 @@ class MainWindow(QMainWindow):
         self.remove_type.triggered.connect(self.delete_type)
 
         self.display_table.triggered.connect(self.show_table)
+        self.display_bar_chart.triggered.connect(self.show_bar_chart)
 
         self.setCentralWidget(self.main_layout_widget)
+        self.main_layout.setCurrentIndex(0)
 
     def open_connection(self):
         Path = QFileDialog.getOpenFileName()
@@ -108,7 +112,7 @@ class MainWindow(QMainWindow):
             self.database_open = True
             self.database = Path
             self.status_bar.showMessage("Database successfully opened")
-            self.table_layout.update_results(self.database)
+            self.table_widget.update_results(self.database)
         else:
             self.database_open = False
             self.status_bar.showMessage("Database failed to open")
@@ -118,6 +122,8 @@ class MainWindow(QMainWindow):
             self.SQLConnection.close_database()
             self.database = None
             self.database_open = False
+            self.table_widget.select_table.clear()
+            self.table_widget.select_type.clear()
         else:
             self.status_bar.showMessage("There is no database currently open")
 
@@ -131,7 +137,7 @@ class MainWindow(QMainWindow):
 
     def new_reading(self):
         if self.database_open:
-            self.insert_reading = AddReading()
+            self.insert_reading = AddReading(self.database)
             self.insert_reading.show()
             self.insert_reading.raise_()
         else:
@@ -223,12 +229,20 @@ class MainWindow(QMainWindow):
             self.status_bar.showMessage("Database not open")
 
     def show_table(self):
-        if not hasattr(self,"table_layout"):
-            self.table_layout = DisplayTable(self.database)
-            self.main_layout.addWidget(self.table_layout)
+        if not hasattr(self,"table_widget"):
+            self.table_widget = DisplayTable(self.database)
+            self.main_layout.addWidget(self.table_widget)
+        else:
+            self.main_layout.setCurrentIndex(0)
         if self.database != None:
-            self.table_layout.update_results(self.database)
-        self.main_layout.setCurrentIndex(0)
+            self.table_widget.update_results(self.database)
+
+    def show_bar_chart(self):
+        if not hasattr(self,"bar_widget"):
+            self.bar_widget = BarWidget()
+            self.main_layout.addWidget(self.bar_widget)
+        else:
+            self.main_layout.setCurrentIndex(1)
             
 if __name__ == "__main__":
     application = QApplication(sys.argv)
