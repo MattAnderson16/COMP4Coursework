@@ -1,9 +1,12 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class EditReading(QMainWindow):
-    def __init__(self):
+    def __init__(self,db):
         super().__init__()
+        self.database = db
 
         self.setWindowTitle("Edit reading")
 
@@ -14,6 +17,8 @@ class EditReading(QMainWindow):
     def create_edit_reading_layout(self):
         self.select_reading_label = QLabel("Select Reading")
         self.select_reading = QComboBox()
+
+        self.get_data()
 
         self.new_reading_label = QLabel("New Consumption Reading:")
         self.new_reading_input = QLineEdit()
@@ -48,6 +53,19 @@ class EditReading(QMainWindow):
 
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.edit_reading)
+
+    def get_data(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT ConsumptionReading FROM Reading")
+            readings = cursor.fetchall()
+        self.select_reading.clear()
+        for reading in readings:
+            self.select_reading.addItem(str(reading[0]))
         
     def edit_reading(self):
-        pass
+        Reading = str(self.select_reading.currentIndex + 1)
+        new_reading = self.new_reading_input.text()
+        new_date = self.new_date_input.selectedDate().toPyDate()
+        
+        sql = "UPDATE Reading SET ConsumptionReading=?,ReadingDate=? where ReadingID=?"

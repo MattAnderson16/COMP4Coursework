@@ -145,7 +145,7 @@ class MainWindow(QMainWindow):
 
     def modify_reading(self):
         if self.database_open:
-            self.change_reading = EditReading()
+            self.change_reading = EditReading(self.database)
             self.change_reading.show()
             self.change_reading.raise_()
         else:
@@ -153,7 +153,7 @@ class MainWindow(QMainWindow):
 
     def clear_reading(self):
         if self.database_open:
-            self.delete_reading = RemoveReading()
+            self.delete_reading = RemoveReading(self.database)
             self.delete_reading.show()
             self.delete_reading.raise_()
         else:

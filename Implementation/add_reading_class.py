@@ -69,7 +69,15 @@ class AddReading(QMainWindow):
         Type = self.select_type.currentIndex()
         Reading = self.reading_input.text()
         Date = self.date_input.selectedDate().toPyDate()
-        #sql = "insert into Reading(ConsumptionReading, ReadingDate,TypeID) values (?,?,?)"
-        
-        
+        sql = "INSERT INTO Reading(ConsumptionReading, ReadingDate) VALUES (?,?)"
+        data = [Reading,Date]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()
         

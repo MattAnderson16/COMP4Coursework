@@ -1,19 +1,24 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class RemoveReading(QMainWindow):
-    def __init__(self):
+    def __init__(self,db):
         super().__init__()
+
+        self.database = db
         
         self.setWindowTitle("Remove Reading")
 
         self.create_remove_reading_layout()
-
         self.setCentralWidget(self.remove_reading_widget)
 
     def create_remove_reading_layout(self):
         self.select_reading_label = QLabel("Select Reading:")
         self.select_reading = QComboBox()
+
+        self.get_readings()
         
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
@@ -36,6 +41,25 @@ class RemoveReading(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.remove_reading)
 
+    def get_readings(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT ConsumptionReading FROM Reading")
+            readings = cursor.fetchall()
+        self.select_reading.clear()
+        for reading in readings:
+            self.select_reading.addItem(str(reading[0]))
+
     def remove_reading(self):
-        pass
+        Reading = str(self.select_reading.currentIndex() + 1)
+        sql = "DELETE from Reading WHERE ReadingID = ?"
+        self.query(sql,Reading)
+        self.close()
+
+    def query(self,sql,Reading):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,Reading)
+            db.commit()
         
