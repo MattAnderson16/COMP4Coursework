@@ -1,9 +1,12 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class AddCost(QMainWindow):
-    def __init__(self):
+    def __init__(self, database):
         super().__init__()
+        self.database = database
         self.setWindowTitle("Add Cost")
 
         self.create_add_cost_layout()
@@ -12,6 +15,8 @@ class AddCost(QMainWindow):
     def create_add_cost_layout(self):
         self.select_consumption_label = QLabel("Consumption Type:")
         self.select_consumption_box = QComboBox()
+
+        self.get_types()
         
         self.cost_per_unit_label = QLabel("Cost Per Unit:")
         self.cost_per_unit_input = QLineEdit()
@@ -50,5 +55,28 @@ class AddCost(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.add_data)
 
+    def get_types(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT ConsumptionType FROM Type")
+            self.consumption_types = cursor.fetchall()
+        self.select_consumption_box.clear()
+        for Type in self.consumption_types:
+            self.select_consumption_box.addItem(Type[0])
+    
     def add_data(self):
-        pass
+        Type = self.select_consumption_box.currentIndex()
+        Cost = self.cost_per_unit_input.text()
+        Date = self.cost_start_date_input.selectedDate().toPyDate()
+
+        sql = "INSERT INTO Cost(CostPerUnit, CostStartDate) VALUES (?,?)"
+        data = [Cost,Date]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()

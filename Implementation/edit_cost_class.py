@@ -1,9 +1,12 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class EditCost(QMainWindow):
-    def __init__(self):
+    def __init__(self, database):
         super().__init__()
+        self.database = database
         self.setWindowTitle("Edit Cost")
 
         self.create_edit_cost_layout()
@@ -12,6 +15,8 @@ class EditCost(QMainWindow):
     def create_edit_cost_layout(self):
         self.select_cost_label = QLabel("Select Cost:")
         self.select_cost_box = QComboBox()
+
+        self.get_data()
 
         self.new_cost_label = QLabel("New Cost Per Unit:")
         self.new_cost_input = QLineEdit()
@@ -50,5 +55,28 @@ class EditCost(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.edit_data)
 
+    def get_data(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT CostPerUnit FROM Cost")
+            costs = cursor.fetchall()
+        self.select_cost_box.clear()
+        for cost in costs:
+            self.select_cost_box.addItem(str(cost[0]))
+        
     def edit_data(self):
-        pass
+        Cost = self.select_cost_box.currentIndex() + 1
+        new_cost = self.new_cost_input.text()
+        new_date = self.new_cost_date_selection.selectedDate().toPyDate()
+
+        sql = "UPDATE Cost SET CostPerUnit=?, CostStartDate=? where CostID=?"
+        data = [new_cost,new_date,str(Cost)]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()

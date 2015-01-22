@@ -1,9 +1,12 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class NewProfile(QMainWindow):
-    def __init__(self):
+    def __init__(self,database):
         super().__init__()
+        self.database = database
 
         self.setWindowTitle("New Profile")
 
@@ -53,4 +56,18 @@ class NewProfile(QMainWindow):
         self.confirm_button.clicked.connect(self.add_user)
 
     def add_user(self):
-        pass
+        first_name = self.first_name_input.text()
+        last_name = self.last_name_input.text()
+        password = self.password_input.text()
+
+        sql = "INSERT INTO User(FirstName,LastName,UserPassword) VALUES(?,?,?)"
+        data = [first_name,last_name,password]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()

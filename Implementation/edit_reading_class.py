@@ -64,8 +64,18 @@ class EditReading(QMainWindow):
             self.select_reading.addItem(str(reading[0]))
         
     def edit_reading(self):
-        Reading = str(self.select_reading.currentIndex + 1)
+        reading = self.select_reading.currentIndex() + 1
         new_reading = self.new_reading_input.text()
         new_date = self.new_date_input.selectedDate().toPyDate()
         
-        sql = "UPDATE Reading SET ConsumptionReading=?,ReadingDate=? where ReadingID=?"
+        sql = "UPDATE Reading SET ConsumptionReading=?,ReadingDate=? WHERE ReadingID=?"
+        data = [new_reading,new_date,str(reading)]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,data)
+            db.commit()

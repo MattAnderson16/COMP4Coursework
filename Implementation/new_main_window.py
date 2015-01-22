@@ -161,7 +161,7 @@ class MainWindow(QMainWindow):
 
     def new_user(self):
         if self.database_open:
-            self.new_user_window = NewProfile()
+            self.new_user_window = NewProfile(self.database)
             self.new_user_window.show()
             self.new_user_window.raise_()
         else:
@@ -169,7 +169,7 @@ class MainWindow(QMainWindow):
 
     def edit_user(self):
         if self.database_open:
-            self.edit_user_window = EditUser()
+            self.edit_user_window = EditUser(self.database)
             self.edit_user_window.show()
             self.edit_user_window.raise_()
         else:
@@ -177,7 +177,7 @@ class MainWindow(QMainWindow):
 
     def remove_user(self):
         if self.database_open:
-            self.remove_user_window = RemoveUser()
+            self.remove_user_window = RemoveUser(self.database)
             self.remove_user_window.show()
             self.remove_user_window.raise_()
         else:
@@ -185,7 +185,7 @@ class MainWindow(QMainWindow):
 
     def insert_cost(self):
         if self.database_open:
-            self.add_cost_window = AddCost()
+            self.add_cost_window = AddCost(self.database)
             self.add_cost_window.show()
             self.add_cost_window.raise_()
         else:
@@ -193,28 +193,28 @@ class MainWindow(QMainWindow):
 
     def change_cost(self):
         if self.database_open:
-            self.modify_cost_window = EditCost()
+            self.modify_cost_window = EditCost(self.database)
             self.modify_cost_window.show()
             self.modify_cost_window.raise_()
         else:
             self.status_bar.showMessage("Database not open")        
     def delete_cost(self):
         if self.database_open:
-            self.delete_cost_window = DeleteCost()
+            self.delete_cost_window = DeleteCost(self.database)
             self.delete_cost_window.show()
             self.delete_cost_window.raise_()
         else:
             self.status_bar.showMessage("Database not open")
     def insert_type(self):
         if self.database_open:
-            self.add_type_window = AddType()
+            self.add_type_window = AddType(self.database)
             self.add_type_window.show()
             self.add_type_window.raise_()
         else:
             self.status_bar.showMessage("Database not open")
     def change_type(self):
         if self.database_open:
-            self.edit_type_window = EditType()
+            self.edit_type_window = EditType(self.database)
             self.edit_type_window.show()
             self.edit_type_window.raise_()
         else:
@@ -222,7 +222,7 @@ class MainWindow(QMainWindow):
 
     def delete_type(self):
         if self.database_open:
-            self.remove_type_window = DeleteType()
+            self.remove_type_window = DeleteType(self.database)
             self.remove_type_window.show()
             self.remove_type_window.raise_()
         else:

@@ -1,9 +1,12 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class DeleteCost(QMainWindow):
-    def __init__(self):
+    def __init__(self, database):
         super().__init__()
+        self.database = database
 
         self.setWindowTitle("Delete Cost Data")
 
@@ -13,6 +16,8 @@ class DeleteCost(QMainWindow):
     def create_delete_cost_data_layout(self):
         self.select_cost_label = QLabel("Select Cost:")
         self.select_cost_button = QComboBox()
+
+        self.get_costs()
 
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
@@ -35,6 +40,24 @@ class DeleteCost(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.delete_data)
 
-    def delete_data(self):
-        pass
+    def get_costs(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT CostPerUnit FROM Cost")
+            costs = cursor.fetchall()
+        self.select_cost_button.clear()
+        for cost in costs:
+            self.select_cost_button.addItem(str(cost[0]))
         
+    def delete_data(self):
+        cost = str(self.select_cost_button.currentIndex()+ 1)
+        sql = "DELETE from Cost WHERE CostID = ?"
+        self.query(sql,cost)
+        self.close()
+
+    def query(self,sql,cost):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA foreign_keys = ON")
+            cursor.execute(sql,cost)
+            db.commit()

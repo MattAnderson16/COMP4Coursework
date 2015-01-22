@@ -62,6 +62,7 @@ class AddReading(QMainWindow):
             cursor = db.cursor()
             cursor.execute("SELECT ConsumptionType FROM Type")
             self.consumption_types = cursor.fetchall()
+        self.select_type.clear()
         for Type in self.consumption_types:
             self.select_type.addItem(Type[0])
         
