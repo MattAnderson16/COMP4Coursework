@@ -17,9 +17,11 @@ from add_type_class import *
 from edit_type_class import *
 from delete_type_class import *
 from table_layout_class import *
-from bar_widget_class import *
+from reading_canvas_class import *
+from graph_controller_class import *
 
 import sys
+import sqlite3
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -29,9 +31,13 @@ class MainWindow(QMainWindow):
         self.database_open = False
         self.database = None
 
+        self.bar_canvas = ReadingCanvas()
+        self.pie_canvas = ReadingCanvas()
+
         self.main_layout = QStackedLayout()
         self.show_table()
         self.show_bar_chart()
+        self.show_pie_chart()
         
         self.main_layout_widget = QWidget()
         self.main_layout_widget.setLayout(self.main_layout)
@@ -100,19 +106,23 @@ class MainWindow(QMainWindow):
 
         self.display_table.triggered.connect(self.show_table)
         self.display_bar_chart.triggered.connect(self.show_bar_chart)
+        self.display_pie_chart.triggered.connect(self.show_pie_chart)
 
         self.setCentralWidget(self.main_layout_widget)
         self.main_layout.setCurrentIndex(0)
 
     def open_connection(self):
-        Path = QFileDialog.getOpenFileName()
+        Path = QFileDialog.getOpenFileName(caption="Open Database")
         self.SQLConnection = SQLConnection(Path)
         ok = self.SQLConnection.open_database()
         if ok:
             self.database_open = True
             self.database = Path
             self.status_bar.showMessage("Database successfully opened")
-            self.table_widget.update_results(self.database)
+            self.table_widget.update_results(self.database)           
+            self.graph_controller = GraphController(self.database)
+            self.get_tables()
+            self.graph_data("2015-01-26")           
         else:
             self.database_open = False
             self.status_bar.showMessage("Database failed to open")
@@ -239,11 +249,85 @@ class MainWindow(QMainWindow):
 
     def show_bar_chart(self):
         if not hasattr(self,"bar_widget"):
-            self.bar_widget = BarWidget()
+            self.select_date_label = QLabel("Date:")
+            self.select_date = QComboBox()
+
+            self.select_table_label = QLabel("Table:")
+            self.select_table = QComboBox()
+
+            self.refresh_button = QPushButton("Refresh")
+
+            self.combo_box_layout = QGridLayout()
+            self.combo_box_layout.addWidget(self.select_table_label,1,1)
+            self.combo_box_layout.addWidget(self.select_table,1,2)
+            self.combo_box_layout.addWidget(self.select_date_label,2,1)
+            self.combo_box_layout.addWidget(self.select_date,2,2)
+            
+            self.bar_layout = QVBoxLayout()
+            self.bar_layout.addLayout(self.combo_box_layout)
+            self.bar_layout.addWidget(self.refresh_button)
+            self.bar_layout.addWidget(self.bar_canvas)
+            self.bar_widget = QWidget()
+            self.bar_widget.setLayout(self.bar_layout)
             self.main_layout.addWidget(self.bar_widget)
+
+            self.select_table.currentIndexChanged.connect(self.update_bar_chart)
+            self.refresh_button.clicked.connect(self.update_bar_chart)
         else:
             self.main_layout.setCurrentIndex(1)
-            
+
+    def show_pie_chart(self):
+        if not hasattr(self,"pie_widget"):
+            self.pie_layout = QVBoxLayout()
+            self.pie_layout.addWidget(self.pie_canvas)
+            self.pie_widget = QWidget()
+            self.pie_widget.setLayout(self.pie_layout)
+            self.main_layout.addWidget(self.pie_widget)
+        else:
+            self.main_layout.setCurrentIndex(2)
+
+    def get_tables(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
+            tables = cursor.fetchall()
+        self.select_table.clear()
+        for table in tables:
+            self.select_table.addItem(table[0])
+
+    def get_dates(self):
+        table = self.select_table.currentText()
+        if table == "Reading":
+            date_entry = "ReadingDate"
+            get_dates = True
+        elif table == "Cost":
+            date_entry = "CostStartDate"
+            get_dates = True
+        else:
+            get_dates = False
+
+        if get_dates:
+            with sqlite3.connect(self.database) as db:
+                cursor = db.cursor()
+                cursor.execute("SELECT {0} FROM {1}".format(date_entry,table))
+                dates = cursor.fetchall()
+            self.select_date.clear()
+            used_dates = []
+            for date in dates:
+                if date[0] not in used_dates:
+                    self.select_date.addItem(date[0])
+                    used_dates.append(date[0])
+
+    def graph_data(self,date):
+        totals = self.graph_controller.consumption_totals(date)
+        self.pie_canvas.show_pie_chart(totals,date)
+        self.bar_canvas.show_bar_graph(totals,date)
+
+    def update_bar_chart(self):
+        date = self.select_date.currentText()
+        self.get_dates()
+        self.graph_data(date)
+
 if __name__ == "__main__":
     application = QApplication(sys.argv)
     window = MainWindow()

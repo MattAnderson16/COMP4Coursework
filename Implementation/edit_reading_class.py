@@ -67,10 +67,15 @@ class EditReading(QMainWindow):
         reading = self.select_reading.currentIndex() + 1
         new_reading = self.new_reading_input.text()
         new_date = self.new_date_input.selectedDate().toPyDate()
-        
-        sql = "UPDATE Reading SET ConsumptionReading=?,ReadingDate=? WHERE ReadingID=?"
-        data = [new_reading,new_date,str(reading)]
-        self.query(data,sql)
+
+        if new_reading != "":        
+            sql = "UPDATE Reading SET ConsumptionReading=? WHERE ReadingID=?"
+            data = [new_reading,str(reading)]
+            self.query(data,sql)
+        if new_date != "":
+            sql = "UPDATE Reading SET ReadingDate=? WHERE ReadingID=?"
+            data = [new_date,str(reading)]
+            self.query(data,sql)
         self.close()
 
     def query(self,data,sql):

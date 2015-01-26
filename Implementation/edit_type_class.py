@@ -69,10 +69,15 @@ class EditType(QMainWindow):
         Type = self.select_type_box.currentIndex() + 1
         new_type = self.new_type_input.text()
         new_description = self.new_description_input.text()
-
-        sql = "UPDATE Type SET ConsumptionType=?, ConsumptionTypeDescription=? WHERE TypeID=?"
-        data = [new_type,new_description,Type]
-        self.query(data,sql)
+        
+        if new_type != "":
+            sql = "UPDATE Type SET ConsumptionTypeDescription=? WHERE TypeID=?"
+            data = [new_description,Type]
+            self.query(data,sql)
+        if new_description != "":
+            sql = "UPDATE Type SET ConsumptionTypeDescription=? WHERE TypeId=?"
+            data = [new_description,Type]
+            self.query(data,sql)
         self.close()
 
     def query(self,data,sql):

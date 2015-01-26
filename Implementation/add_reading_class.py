@@ -60,18 +60,19 @@ class AddReading(QMainWindow):
     def get_types(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("SELECT ConsumptionType FROM Type")
+            cursor.execute("SELECT TypeID,ConsumptionType FROM Type")
             self.consumption_types = cursor.fetchall()
         self.select_type.clear()
         for Type in self.consumption_types:
-            self.select_type.addItem(Type[0])
+            self.select_type.addItem("{0}. {1}".format(Type[0],Type[1]))
         
     def add_data(self):
-        Type = self.select_type.currentIndex()
+        Type = self.select_type.currentText()
+        Type = Type[0]
         Reading = self.reading_input.text()
         Date = self.date_input.selectedDate().toPyDate()
-        sql = "INSERT INTO Reading(ConsumptionReading, ReadingDate) VALUES (?,?)"
-        data = [Reading,Date]
+        sql = "INSERT INTO Reading(ConsumptionReading, ReadingDate, TypeID) VALUES (?,?,?)"
+        data = [Reading,Date,Type]
         self.query(data,sql)
         self.close()
 

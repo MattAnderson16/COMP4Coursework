@@ -52,6 +52,16 @@ class DisplayTable(QWidget):
         for table in tables:
             self.select_table.addItem(table[0])
 
+    def get_types(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA Foreign_Keys = ON")
+            cursor.execute("SELECT TypeID,ConsumptionType FROM Type")
+            Types = cursor.fetchall()
+        self.select_type.clear()
+        for Type in Types:
+            self.select_type.addItem("{0}. {1}".format(Type[0],Type[1]))
+
     def get_table_data(self):
         #will setup a query to get the data depending on the selected table and type if relevant
         self.show_results()
@@ -59,4 +69,5 @@ class DisplayTable(QWidget):
     def update_results(self,db):
         self.database = db
         self.get_tables()
+        self.get_types()
         self.display_table_layout()

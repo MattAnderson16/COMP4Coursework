@@ -1,9 +1,13 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
+import sqlite3
+
 class RemoveUser(QMainWindow):
-    def __init__(self):
+    def __init__(self,database):
         super().__init__()
+        self.database = database
+        
         self.setWindowTitle("Remove User")
 
         self.create_remove_user_layout()
@@ -12,6 +16,8 @@ class RemoveUser(QMainWindow):
     def create_remove_user_layout(self):
         self.user_label = QLabel("Select User:")
         self.select_user = QComboBox()
+
+        self.get_users()
 
         self.back_button = QPushButton("Back")
         self.confirm_button = QPushButton("Confirm")
@@ -34,5 +40,25 @@ class RemoveUser(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.remove_user)
 
+    def get_users(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT UserID,FirstName FROM User")
+            users = cursor.fetchall()
+        self.select_user.clear()
+        for user in users:
+            self.select_user.addItem("{0}. {1}".format(user[0],user[1]))
+
     def remove_user(self):
-        pass
+        user = self.select_user.currentText()
+        
+        sql = "DELETE FROM User WHERE UserID = ?"
+        self.query(sql,user[0])
+        self.close()
+
+    def query(self,sql,user):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA Foreign_Keys = ON")
+            cursor.execute(sql,user)
+            db.commit()

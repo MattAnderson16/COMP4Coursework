@@ -69,9 +69,14 @@ class EditCost(QMainWindow):
         new_cost = self.new_cost_input.text()
         new_date = self.new_cost_date_selection.selectedDate().toPyDate()
 
-        sql = "UPDATE Cost SET CostPerUnit=?, CostStartDate=? where CostID=?"
-        data = [new_cost,new_date,str(Cost)]
-        self.query(data,sql)
+        if new_cost != "":
+            sql = "UPDATE Cost SET CostPerUnit=?, CostStartDate=? WHERE CostID=?"
+            data = [new_cost,str(Cost)]
+            self.query(data,sql)
+        if new_date != "":
+            sql = "UPDATE Cost SET CostStartDate=? WHERE CostID=?"
+            data = [new_date,Cost]
+            self.query(data,sql)
         self.close()
 
     def query(self,data,sql):
