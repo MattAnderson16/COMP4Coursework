@@ -1,9 +1,12 @@
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
+import sqlite3
+
 class EditUser(QMainWindow):
-    def __init__(self):
+    def __init__(self,database):
         super().__init__()
+        self.database = database
 
         self.setWindowTitle("Edit Profile")
 
@@ -13,6 +16,8 @@ class EditUser(QMainWindow):
     def create_edit_user_layout(self):
         self.select_user_label = QLabel("User:")
         self.select_user = QComboBox()
+
+        self.get_user_data()
 
         self.new_first_name_label = QLabel("New First Name:")
         self.new_first_name_input = QLineEdit()
@@ -60,5 +65,29 @@ class EditUser(QMainWindow):
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.edit_user)
 
+    def get_user_data(self):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("SELECT FirstName from User")
+            Users = cursor.fetchall()
+        self.select_user.clear()
+        for user in Users:
+            self.select_user.addItem(user[0])
+
     def edit_user(self):
-        pass
+        User = self.select_user.currentIndex() + 1
+        new_firstname = self.new_first_name_input.text()
+        new_lastname = self.new_last_name_input.text()
+        new_password = self.new_password_input.text()
+
+        sql = "UPDATE User SET FirstName=?,LastName=?,UserPassword=? WHERE UserID = ?"
+        data = [new_firstname,new_lastname,new_password,User]
+        self.query(data,sql)
+        self.close()
+
+    def query(self,data,sql):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            cursor.execute("PRAGMA Foreign_Keys = ON")
+            cursor.execute(sql,data)
+            db.commit()
