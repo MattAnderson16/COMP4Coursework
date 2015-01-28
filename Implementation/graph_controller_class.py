@@ -15,10 +15,11 @@ class GraphController:
             results = cursor.fetchall()
             return results
 
-    def consumption_totals(self,date):
-        sql = """SELECT Type.ConsumptionType,sum(Reading.ConsumptionReading) as total
+    def consumption_averages(self,date):
+        sql = """SELECT Type.ConsumptionType,avg(Reading.ConsumptionReading) as average
                  FROM Type, Reading
                  WHERE Type.TypeID = Reading.TypeID and
                  Reading.ReadingDate = ?
                  GROUP BY Type.ConsumptionType"""
-        return self.query(sql,[date])   
+        return self.query(sql,[date])
+

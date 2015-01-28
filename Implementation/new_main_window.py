@@ -319,7 +319,7 @@ class MainWindow(QMainWindow):
                     used_dates.append(date[0])
 
     def graph_data(self,date):
-        totals = self.graph_controller.consumption_totals(date)
+        totals = self.graph_controller.consumption_averages(date)
         self.pie_canvas.show_pie_chart(totals,date)
         self.bar_canvas.show_bar_graph(totals,date)
 

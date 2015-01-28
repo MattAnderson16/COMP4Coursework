@@ -63,14 +63,26 @@ class AddCost(QMainWindow):
         self.select_consumption_box.clear()
         for Type in self.consumption_types:
             self.select_consumption_box.addItem(Type[0])
+
+    def get_id(self,Type):
+        with sqlite3.connect(self.database) as db:
+            cursor = db.cursor()
+            sql = "SELECT Cost.CostID from Cost,Type WHERE Cost.CostID = Type.TypeID and TypeID = ?"
+            cursor.execute(sql,Type)
+            CostID = cursor.fetchall()
+            return CostID
     
     def add_data(self):
-        Type = self.select_consumption_box.currentIndex()
+        Type = str(self.select_consumption_box.currentIndex() + 1)
         Cost = self.cost_per_unit_input.text()
         Date = self.cost_start_date_input.selectedDate().toPyDate()
 
         sql = "INSERT INTO Cost(CostPerUnit, CostStartDate) VALUES (?,?)"
         data = [Cost,Date]
+        self.query(data,sql)
+        CostID = str(self.get_id(Type))
+        sql = "INSERT INTO TypeCost(CostID,TypeID) VALUES (?,?)"
+        data = [CostID,Type]
         self.query(data,sql)
         self.close()
 
