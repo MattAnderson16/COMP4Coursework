@@ -43,14 +43,15 @@ class DeleteCost(QMainWindow):
     def get_costs(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("SELECT CostPerUnit FROM Cost")
+            cursor.execute("SELECT CostID,CostPerUnit FROM Cost")
             costs = cursor.fetchall()
         self.select_cost_button.clear()
         for cost in costs:
-            self.select_cost_button.addItem(str(cost[0]))
+            self.select_cost_button.addItem("{0}: {1}".format(cost[0],cost[1]))
         
     def delete_data(self):
-        cost = str(self.select_cost_button.currentIndex()+ 1)
+        cost = self.select_cost_button.currentText()
+        cost = cost[0]
         sql = "DELETE from Cost WHERE CostID = ?"
         self.query(sql,cost)
         self.close()
