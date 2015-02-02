@@ -51,9 +51,10 @@ class DeleteCost(QMainWindow):
         
     def delete_data(self):
         cost = self.select_cost_button.currentText()
+        cost = cost.partition(":")
         cost = cost[0]
         sql = "DELETE from Cost WHERE CostID = ?"
-        self.query(sql,cost)
+        self.query(sql,[cost])
         self.close()
 
     def query(self,sql,cost):

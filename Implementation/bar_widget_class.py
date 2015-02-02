@@ -4,6 +4,7 @@ from reading_canvas_class import *
 from graph_controller_class import *
 
 import sqlite3
+import pdb
 
 class BarWidget(QWidget):
     def __init__(self,db):
@@ -38,6 +39,7 @@ class BarWidget(QWidget):
         self.refresh_button.clicked.connect(self.update_bar_chart)
 
     def update_bar_chart(self):
+        #pdb.set_trace()
         date = self.select_date.currentText()
         table = self.select_table.currentText()
         self.get_dates()

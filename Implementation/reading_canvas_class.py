@@ -14,6 +14,7 @@ class ReadingCanvas(FigureCanvas):
 
     def show_bar_graph(self,data,date):
         self.ax.clear()
+        print(data)
         data_dict = dict(data)
         for bar_number, key in enumerate(data_dict):
             self.ax.bar(bar_number,data_dict[key])

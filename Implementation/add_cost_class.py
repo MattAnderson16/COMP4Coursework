@@ -2,6 +2,7 @@ from PyQt4.QtGui import *
 from PyQt4.QtCore import *
 
 import sqlite3
+import pdb
 
 class AddCost(QMainWindow):
     def __init__(self, database):
@@ -64,15 +65,17 @@ class AddCost(QMainWindow):
         for Type in self.consumption_types:
             self.select_consumption_box.addItem(Type[0])
 
-    def get_id(self,Type):
+    def get_id(self,Cost):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            sql = "SELECT Cost.CostID from Cost,Type WHERE Cost.CostID = Type.TypeID and TypeID = ?"
-            cursor.execute(sql,Type)
+            sql = "SELECT CostID from Cost where CostPerUnit = {0}".format(Cost)
+            cursor.execute(sql)
             CostID = cursor.fetchall()
+            Cost = {Cost:CostID}
             return CostID
     
     def add_data(self):
+        pdb.set_trace()
         Type = str(self.select_consumption_box.currentIndex() + 1)
         Cost = self.cost_per_unit_input.text()
         Date = self.cost_start_date_input.selectedDate().toPyDate()
@@ -80,9 +83,10 @@ class AddCost(QMainWindow):
         sql = "INSERT INTO Cost(CostPerUnit, CostStartDate) VALUES (?,?)"
         data = [Cost,Date]
         self.query(data,sql)
-        CostID = str(self.get_id(Type))
+        CostID = self.get_id(Cost)
+        CostID = CostID[0]
         sql = "INSERT INTO TypeCost(CostID,TypeID) VALUES (?,?)"
-        data = [CostID,Type]
+        data = [str(CostID[0]),Type]
         self.query(data,sql)
         self.close()
 

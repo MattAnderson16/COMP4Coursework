@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
 
         self.display_table.triggered.connect(self.show_table)
         self.display_bar_chart.triggered.connect(self.show_bar_chart)
-        self.display_pie_chart.triggered.connect(self.show_pie_chart)
+        #self.display_pie_chart.triggered.connect(self.show_pie_chart)
 
         self.setCentralWidget(self.main_layout_widget)
         self.main_layout.setCurrentIndex(0)

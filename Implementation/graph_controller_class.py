@@ -24,7 +24,7 @@ class GraphController:
                      GROUP BY Type.ConsumptionType"""
             return self.query(sql,[date])
         elif table == "Cost":
-            sql = """SELECT Type.ConsumptionType,Cost.CostStartDate,Reading.ConsumptionReading, TypeCost.CostID, TypeCost.TypeID
+            sql = """SELECT Type.ConsumptionType,Cost.CostStartDate
                      FROM Type, Cost, Reading, TypeCost
                      WHERE Type.TypeID = Reading.TypeID and
                      TypeCost.CostID = Cost.CostID and
