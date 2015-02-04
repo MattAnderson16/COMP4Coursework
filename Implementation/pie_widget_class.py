@@ -4,18 +4,17 @@ from reading_canvas_class import *
 from graph_controller_class import *
 
 import sqlite3
-import pdb
 
-class BarWidget(QWidget):
+class PieWidget(QWidget):
     def __init__(self,db):
         super().__init__()
         self.database = db
         self.graph_controller = GraphController(self.database)
-        self.bar_canvas = ReadingCanvas()
+        self.pie_canvas = ReadingCanvas()
 
-        self.select_date_label = QLabel("Date:")
+        self.select_date_label = QLabel("Date")
         self.select_date = QComboBox()
-        
+
         self.select_table_label = QLabel("Table:")
         self.select_table = QComboBox()
 
@@ -26,25 +25,24 @@ class BarWidget(QWidget):
         self.combo_box_layout.addWidget(self.select_table,1,2)
         self.combo_box_layout.addWidget(self.select_date_label,2,1)
         self.combo_box_layout.addWidget(self.select_date,2,2)
-        
-        self.bar_layout = QVBoxLayout()
-        self.bar_layout.addLayout(self.combo_box_layout)
-        self.bar_layout.addWidget(self.refresh_button)
-        self.bar_layout.addWidget(self.bar_canvas)
 
-        self.setLayout(self.bar_layout)
+        self.pie_layout = QVBoxLayout()
+        self.pie_layout.addLayout(self.combo_box_layout)
+        self.pie_layout.addWidget(self.refresh_button)
+        self.pie_layout.addWidget(self.pie_canvas)
+
+        self.setLayout(self.pie_layout)
 
         self.select_table.currentIndexChanged.connect(self.update_dates)
         self.select_table.activated.connect(self.update_dates)
-        self.select_date.activated.connect(self.update_bar_chart)
-        self.refresh_button.clicked.connect(self.update_bar_chart)
+        self.select_date.activated.connect(self.update_pie_chart)
+        self.refresh_button.clicked.connect(self.update_pie_chart)
 
     def update_dates(self):
         self.get_dates()
-        self.update_bar_chart()
+        self.update_pie_chart()
 
-    def update_bar_chart(self):
-        #pdb.set_trace()
+    def update_pie_chart(self):
         date = self.select_date.currentText()
         table = self.select_table.currentText()
         self.graph_data(date,table)
@@ -71,7 +69,6 @@ class BarWidget(QWidget):
             get_dates = True
         else:
             get_dates = False
-
         if get_dates:
             with sqlite3.connect(self.database) as db:
                 cursor = db.cursor()
@@ -86,4 +83,5 @@ class BarWidget(QWidget):
 
     def graph_data(self,date,table):
         totals = self.graph_controller.consumption_averages(date,table)
-        self.bar_canvas.show_bar_graph(totals,date)
+        self.pie_canvas.show_pie_chart(totals,date)
+        

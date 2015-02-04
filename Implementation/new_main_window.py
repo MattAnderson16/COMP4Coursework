@@ -20,6 +20,7 @@ from table_layout_class import *
 from reading_canvas_class import *
 from graph_controller_class import *
 from bar_widget_class import *
+from pie_widget_class import *
 
 import sys
 import sqlite3
@@ -32,10 +33,6 @@ class MainWindow(QMainWindow):
         self.database_open = True
         self.database = "ConsumptionMeteringSystem.db"
 
-        self.graph_controller = GraphController(self.database) 
-
-        self.pie_canvas = ReadingCanvas()
-
         self.main_layout = QStackedLayout()
         self.show_table()
         self.show_bar_chart()
@@ -43,6 +40,9 @@ class MainWindow(QMainWindow):
 
         self.bar_widget.get_tables()
         self.bar_widget.update_bar_chart()
+
+        self.pie_widget.get_tables()
+        self.pie_widget.update_pie_chart()
         
         self.main_layout_widget = QWidget()
         self.main_layout_widget.setLayout(self.main_layout)
@@ -111,7 +111,7 @@ class MainWindow(QMainWindow):
 
         self.display_table.triggered.connect(self.show_table)
         self.display_bar_chart.triggered.connect(self.show_bar_chart)
-        #self.display_pie_chart.triggered.connect(self.show_pie_chart)
+        self.display_pie_chart.triggered.connect(self.show_pie_chart)
 
         self.setCentralWidget(self.main_layout_widget)
         self.main_layout.setCurrentIndex(0)
@@ -125,6 +125,12 @@ class MainWindow(QMainWindow):
             self.database = Path
             self.status_bar.showMessage("Database successfully opened")
             self.table_widget.update_results(self.database)
+            
+            self.bar_widget.get_tables()
+            self.bar_widget.update_bar_chart()
+
+            self.pie_widget.get_tables()
+            self.pie_widget.update_pie_chart()
          
         else:
             self.database_open = False
@@ -259,10 +265,7 @@ class MainWindow(QMainWindow):
 
     def show_pie_chart(self):
         if not hasattr(self,"pie_widget"):
-            self.pie_layout = QVBoxLayout()
-            self.pie_layout.addWidget(self.pie_canvas)
-            self.pie_widget = QWidget()
-            self.pie_widget.setLayout(self.pie_layout)
+            self.pie_widget = PieWidget(self.database)
             self.main_layout.addWidget(self.pie_widget)
         else:
             self.main_layout.setCurrentIndex(2)

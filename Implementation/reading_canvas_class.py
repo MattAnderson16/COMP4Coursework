@@ -34,3 +34,12 @@ class ReadingCanvas(FigureCanvas):
         self.ax.pie(data,labels=labels,autopct='%1.1f%%')#Creates the pie chart on the figure subplot using the given data and labels. "autopct='%1.1f%%'" formats the data values to 1 decimal place and adds the percentage symbol
         self.ax.set_title("Percentage Consumption for {0}".format(date))
         self.fig.canvas.draw()
+
+    def show_scatter_graph(self,data,date):
+        self.ax.clear()
+        data_dict = dict(data)
+        data = list(data_dict.values())
+        labels = list(data_dict.keys())
+        self.ax.scatter(data,labels)
+        self.ax.set_title("Consumption for {0}".format(date))
+        self.fig.canvas.draw()
