@@ -19,19 +19,11 @@ class DisplayTable(QWidget):
             self.select_table_label = QLabel("Select Table:")
             self.select_table = QComboBox()
 
-            self.select_type_label = QLabel("Select Type:")
-            self.select_type = QComboBox()
-
             self.select_table_layout = QHBoxLayout()
             self.select_table_layout.addWidget(self.select_table_label)
             self.select_table_layout.addWidget(self.select_table)
 
-            self.select_type_layout = QHBoxLayout()
-            self.select_type_layout.addWidget(self.select_type_label)
-            self.select_type_layout.addWidget(self.select_type)
-
             self.layout.addLayout(self.select_table_layout)
-            self.layout.addLayout(self.select_type_layout)
             self.layout.addWidget(self.table_view)
         if self.database != "None":
             self.get_table_data()
@@ -49,25 +41,17 @@ class DisplayTable(QWidget):
             cursor.execute("SELECT name FROM sqlite_master WHERE type = 'table'")
             tables = cursor.fetchall()
         self.select_table.clear()
+        tables.pop(3)
+        tables.pop(2)
         for table in tables:
             self.select_table.addItem(table[0])
 
-    def get_types(self):
-        with sqlite3.connect(self.database) as db:
-            cursor = db.cursor()
-            cursor.execute("PRAGMA Foreign_Keys = ON")
-            cursor.execute("SELECT TypeID,ConsumptionType FROM Type")
-            Types = cursor.fetchall()
-        self.select_type.clear()
-        for Type in Types:
-            self.select_type.addItem("{0}. {1}".format(Type[0],Type[1]))
-
     def get_table_data(self):
-        #will setup a query to get the data depending on the selected table and type if relevant
+        table = self.select_table.currentText()
+        self.query = "SELECT * FROM {0}".format(table)
         self.show_results()
 
     def update_results(self,db):
         self.database = db
         self.get_tables()
-        self.get_types()
         self.display_table_layout()

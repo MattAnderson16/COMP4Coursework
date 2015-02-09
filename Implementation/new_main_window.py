@@ -1,6 +1,6 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-from PyQt4.QtSql import *
+#from PyQt4.QtSql import *
 
 from sqlconnection_class import *
 from format_database_class import *
@@ -21,6 +21,8 @@ from reading_canvas_class import *
 from graph_controller_class import *
 from bar_widget_class import *
 from pie_widget_class import *
+from scatter_widget_class import *
+from line_widget_class import *
 
 import sys
 import sqlite3
@@ -37,12 +39,19 @@ class MainWindow(QMainWindow):
         self.show_table()
         self.show_bar_chart()
         self.show_pie_chart()
+        self.show_scatter_graph()
+        self.show_line_graph()
 
         self.bar_widget.get_tables()
         self.bar_widget.update_bar_chart()
 
         self.pie_widget.get_tables()
         self.pie_widget.update_pie_chart()
+
+        self.scatter_widget.update_scatter_graph()
+
+        self.line_widget.get_tables()
+        self.line_widget.update_line_graph()
         
         self.main_layout_widget = QWidget()
         self.main_layout_widget.setLayout(self.main_layout)
@@ -112,6 +121,8 @@ class MainWindow(QMainWindow):
         self.display_table.triggered.connect(self.show_table)
         self.display_bar_chart.triggered.connect(self.show_bar_chart)
         self.display_pie_chart.triggered.connect(self.show_pie_chart)
+        self.display_scatter_graph.triggered.connect(self.show_scatter_graph)
+        self.display_line_graph.triggered.connect(self.show_line_graph)
 
         self.setCentralWidget(self.main_layout_widget)
         self.main_layout.setCurrentIndex(0)
@@ -131,6 +142,11 @@ class MainWindow(QMainWindow):
 
             self.pie_widget.get_tables()
             self.pie_widget.update_pie_chart()
+
+            self.scatter_widget.update_scatter_graph()
+
+            self.line_widget.get_tables()
+            self.line_widget.update_line_graph()
          
         else:
             self.database_open = False
@@ -270,9 +286,19 @@ class MainWindow(QMainWindow):
         else:
             self.main_layout.setCurrentIndex(2)
 
-    def graph_data(self,date):
-        totals = self.graph_controller.consumption_averages(date)
-        self.pie_canvas.show_pie_chart(totals,date)
+    def show_scatter_graph(self):
+        if not hasattr(self,"scatter_widget"):
+            self.scatter_widget = ScatterWidget(self.database)
+            self.main_layout.addWidget(self.scatter_widget)
+        else:
+            self.main_layout.setCurrentIndex(3)
+
+    def show_line_graph(self):
+        if not hasattr(self,"line_widget"):
+            self.line_widget = LineWidget(self.database)
+            self.main_layout.addWidget(self.line_widget)
+        else:
+            self.main_layout.setCurrentIndex(4)
 
 if __name__ == "__main__":
     application = QApplication(sys.argv)

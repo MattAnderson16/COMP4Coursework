@@ -14,7 +14,6 @@ class ReadingCanvas(FigureCanvas):
 
     def show_bar_graph(self,data,date):
         self.ax.clear()
-        print(data)
         data_dict = dict(data)
         for bar_number, key in enumerate(data_dict):
             self.ax.bar(bar_number,data_dict[key])
@@ -38,8 +37,23 @@ class ReadingCanvas(FigureCanvas):
     def show_scatter_graph(self,data,date):
         self.ax.clear()
         data_dict = dict(data)
-        data = list(data_dict.values())
+        costs = list(data_dict.values())
         labels = list(data_dict.keys())
         self.ax.scatter(data,labels)
         self.ax.set_title("Consumption for {0}".format(date))
         self.fig.canvas.draw()
+
+    def show_line_graph(self,data,date):
+        self.ax.clear()
+        data_list = []
+        labels_list = []
+        for Data in data:
+            data_list.append(Data[0])
+        for label in data:
+            labels_list.append(Data[0])
+        self.ax.plot(data_list,labels_list)
+        self.ax.set_title("Consumption for {0}".format(date))
+        self.fig.canvas.draw()
+        
+        
+        

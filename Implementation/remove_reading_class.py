@@ -44,14 +44,16 @@ class RemoveReading(QMainWindow):
     def get_readings(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("SELECT ConsumptionReading FROM Reading")
+            cursor.execute("SELECT ReadingID,ConsumptionReading FROM Reading")
             readings = cursor.fetchall()
         self.select_reading.clear()
         for reading in readings:
-            self.select_reading.addItem(str(reading[0]))
+            self.select_reading.addItem("{0}: {1}".format(reading[0],reading[1]))
 
     def remove_reading(self):
-        Reading = str(self.select_reading.currentIndex() + 1)
+        Reading = self.select_reading.currentText()
+        Reading = Reading.partition(":")
+        Reading = Reading[0]
         sql = "DELETE from Reading WHERE ReadingID = ?"
         self.query(sql,Reading)
         self.close()

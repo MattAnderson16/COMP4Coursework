@@ -58,19 +58,21 @@ class EditCost(QMainWindow):
     def get_data(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("SELECT CostPerUnit FROM Cost")
+            cursor.execute("SELECT CostID,CostPerUnit FROM Cost")
             costs = cursor.fetchall()
         self.select_cost_box.clear()
         for cost in costs:
-            self.select_cost_box.addItem(str(cost[0]))
+            self.select_cost_box.addItem("{0}: {1}".format(cost[0],cost[1]))
         
     def edit_data(self):
-        Cost = self.select_cost_box.currentIndex() + 1
+        Cost = self.select_cost_box.currentText()
+        Cost = Cost.partition(":")
+        Cost = Cost[0]
         new_cost = self.new_cost_input.text()
         new_date = self.new_cost_date_selection.selectedDate().toPyDate()
 
         if new_cost != "":
-            sql = "UPDATE Cost SET CostPerUnit=?, CostStartDate=? WHERE CostID=?"
+            sql = "UPDATE Cost SET CostPerUnit=? WHERE CostID=?"
             data = [new_cost,str(Cost)]
             self.query(data,sql)
         if new_date != "":

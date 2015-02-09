@@ -33,6 +33,26 @@ class GraphController:
                      Cost.CostStartDate = ?
                      GROUP BY Type.ConsumptionType"""
             return self.query(sql,[date])
-                     
 
+    def cost_of_readings(self,date):
+        sql = """SELECT Reading.ConsumptionReading, Cost.CostPerUnit
+                 FROM Type,Cost,Reading,TypeCost
+                 WHERE TypeCost.TypeID = Reading.TypeID and
+                 TypeCost.CostID = Cost.CostID and
+                 Cost.CostStartDate = Reading.ReadingDate and
+                 Cost.CostStartDate = ?
+                 GROUP BY Reading.ConsumptionReading"""
+        data = self.query(sql, [date])
+        return data
 
+    def readings_over_time(self,date,table,Type):
+        if table == "Reading":
+            sql = """SELECT avg(Reading.ConsumptionReading), Reading.ReadingDate
+                     FROM Reading, Type
+                     WHERE Type.TypeID = Reading.TypeID and
+                     Reading.ReadingDate = ? and
+                     Type.ConsumptionType = ?
+                     GROUP BY Reading.ConsumptionReading"""
+            data = self.query(sql, [date,Type])
+            print(data)
+            return data

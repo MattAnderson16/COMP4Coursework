@@ -75,7 +75,7 @@ class AddCost(QMainWindow):
             return CostID
     
     def add_data(self):
-        pdb.set_trace()
+        #pdb.set_trace()
         Type = str(self.select_consumption_box.currentIndex() + 1)
         Cost = self.cost_per_unit_input.text()
         Date = self.cost_start_date_input.selectedDate().toPyDate()
