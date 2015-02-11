@@ -16,7 +16,7 @@ from delete_cost_class import *
 from add_type_class import *
 from edit_type_class import *
 from delete_type_class import *
-from table_layout_class import *
+from table_layout_class_new import *
 from reading_canvas_class import *
 from graph_controller_class import *
 from bar_widget_class import *
@@ -41,6 +41,10 @@ class MainWindow(QMainWindow):
         self.show_pie_chart()
         self.show_scatter_graph()
         self.show_line_graph()
+
+        self.table_widget.open_database()
+        self.table_widget.get_tables()
+        self.table_widget.get_types()
 
         self.bar_widget.get_tables()
         self.bar_widget.update_bar_chart()
@@ -135,7 +139,7 @@ class MainWindow(QMainWindow):
             self.database_open = True
             self.database = Path
             self.status_bar.showMessage("Database successfully opened")
-            self.table_widget.update_results(self.database)
+            self.table_widget.get_tables()
             
             self.bar_widget.get_tables()
             self.bar_widget.update_bar_chart()
@@ -269,8 +273,7 @@ class MainWindow(QMainWindow):
             self.main_layout.addWidget(self.table_widget)
         else:
             self.main_layout.setCurrentIndex(0)
-        if self.database != None:
-            self.table_widget.update_results(self.database)
+            
 
     def show_bar_chart(self):
         if not hasattr(self,"bar_widget"):
