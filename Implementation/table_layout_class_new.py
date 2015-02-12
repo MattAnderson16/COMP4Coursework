@@ -2,6 +2,7 @@ from PyQt4.QtSql import *
 from PyQt4.QtGui import *
 
 import sqlite3
+import pdb
 
 class DisplayTable(QWidget):
     def __init__(self,path):
@@ -18,6 +19,9 @@ class DisplayTable(QWidget):
         self.select_table = QComboBox()
         self.select_type_label = QLabel("Select Type:")
         self.select_type = QComboBox()
+        self.refresh_button = QPushButton("Refresh")
+
+        self.select_type.setEnabled(False)
 
         self.select_table_layout = QHBoxLayout()
         self.select_table_layout.addWidget(self.select_table_label)
@@ -30,11 +34,14 @@ class DisplayTable(QWidget):
         self.table_layout = QVBoxLayout()
         self.table_layout.addLayout(self.select_table_layout)
         self.table_layout.addLayout(self.select_type_layout)
+        self.table_layout.addWidget(self.refresh_button)
         self.table_layout.addWidget(self.table_view)
 
         self.setLayout(self.table_layout)
         
         self.select_table.currentIndexChanged.connect(self.update_table_view)
+        self.select_type.currentIndexChanged.connect(self.update_table_view)
+        self.refresh_button.clicked.connect(self.update_table_view)
 
     def open_database(self):
         if self.db:
@@ -70,15 +77,32 @@ class DisplayTable(QWidget):
         for table in tables:
             self.select_table.addItem(table[0])
 
-    def display_table(self,table):
+    def display_table(self,table,Type = None):
         model = QSqlTableModel()
         model.setTable(self.db.tables()[table])
+##        if Type != None:
+##            print("Type: {0}".format(Type))
+##            if table == 5:
+##                Filter = """SELECT * FROM Reading WHERE TypeID = {0}""".format(Type)
+##            elif table == 1:
+##                Filter = """SELECT * FROM Cost WHERE TypeCost.TypeID = {0}""".format(Type)
+##            print(Filter)
+##            model.setFilter(Filter)
         model.select()
-
+        
         self.table_view.setModel(model)
         self.table_view.show()
 
     def update_table_view(self):
         table = self.select_table.currentIndex()
-        self.display_table(table)
+        print("table: {0}".format(table))
+        if table == 1 or table == 5:
+            #pdb.set_trace()
+            self.select_type.setEnabled(True)
+            Type = str(self.select_type.currentIndex() + 1)
+            print(Type)
+            self.display_table(table,Type)
+        else:
+            self.select_type.setEnabled(False)
+            self.display_table(table)
         
