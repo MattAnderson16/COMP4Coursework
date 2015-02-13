@@ -2,6 +2,7 @@ from PyQt4.QtCore import *
 from PyQt4.QtGui import *
 
 import sqlite3
+import re
 
 class EditUser(QMainWindow):
     def __init__(self,database):
@@ -12,6 +13,9 @@ class EditUser(QMainWindow):
 
         self.create_edit_user_layout()
         self.setCentralWidget(self.edit_user_widget)
+
+        self.name_pattern = "[A-Za-z]"
+        self.password_pattern = "[A-Za-z0-9@#$%^&+=]{4,16}"
 
     def create_edit_user_layout(self):
         self.select_user_label = QLabel("User:")
@@ -64,31 +68,58 @@ class EditUser(QMainWindow):
 
         self.back_button.clicked.connect(self.close)
         self.confirm_button.clicked.connect(self.edit_user)
+        self.new_first_name_input.textChanged.connect(self.check_first_name)
+        self.new_last_name_input.textChanged.connect(self.check_last_name)
+        self.new_password_input.textChanged.connect(self.check_password)
+
+    def check_password(self):
+        password = self.new_password_input.text()
+        if re.match(self.password_pattern,password):
+            self.new_password_input.setStyleSheet("border: 1px solid green;")
+        else:
+            self.new_password_input.setStyleSheet("border: 1px solid red;")
+
+    def check_first_name(self):
+        name = self.new_first_name_input.text()
+        if re.match(self.name_pattern,name):
+            self.new_first_name_input.setStyleSheet("border: 1px solid green;")
+        else:
+            self.new_first_name_input.setStyleSheet("border: 1px solid red;")
+
+    def check_last_name(self):
+        name = self.new_last_name_input.text()
+        if re.match(self.name_pattern,name):
+            self.new_last_name_input.setStyleSheet("border: 1px solid green;")
+        else:
+            self.new_last_name_input.setStyleSheet("border: 1px solid red;")
 
     def get_user_data(self):
         with sqlite3.connect(self.database) as db:
             cursor = db.cursor()
-            cursor.execute("SELECT FirstName from User")
+            cursor.execute("SELECT FirstName,UserID from User")
             Users = cursor.fetchall()
         self.select_user.clear()
         for user in Users:
-            self.select_user.addItem(user[0])
+            self.select_user.addItem("{0}: {1}".format(user[1],user[0]))
 
     def edit_user(self):
-        User = self.select_user.currentIndex() + 1
+        User = self.select_user.currentText()
+        User = User.partition(":")
+        User = User[0]
         new_firstname = self.new_first_name_input.text()
         new_lastname = self.new_last_name_input.text()
         new_password = self.new_password_input.text()
-        if new_firstname != "":
-            sql = ("UPDATE User SET FirstName=? WHERE UserID=?")
-            self.query([new_firstname,User],sql)
-        if new_lastname != "":
-            sql = ("UPDATE User SET LastName=? WHERE UserID=?")
-            self.query([new_lastname,User],sql)
-        if new_password !="":
-            sql = ("UPDATE User SET UserPassword=? WHERE UserID=?")
-            self.query([new_password,User],sql)
-        self.close()
+        if re.match(self.password_pattern,new_password) and re.match(self.name_pattern,new_firstname) and re.match(self.name_pattern,new_lastname):
+            if new_firstname != "":
+                sql = ("UPDATE User SET FirstName=? WHERE UserID=?")
+                self.query([new_firstname,User],sql)
+            if new_lastname != "":
+                sql = ("UPDATE User SET LastName=? WHERE UserID=?")
+                self.query([new_lastname,User],sql)
+            if new_password !="":
+                sql = ("UPDATE User SET UserPassword=? WHERE UserID=?")
+                self.query([new_password,User],sql)
+            self.close()
 
     def query(self,data,sql):
         with sqlite3.connect(self.database) as db:

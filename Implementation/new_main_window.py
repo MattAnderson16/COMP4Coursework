@@ -1,6 +1,5 @@
 from PyQt4.QtGui import *
 from PyQt4.QtCore import *
-#from PyQt4.QtSql import *
 
 from sqlconnection_class import *
 from format_database_class import *
