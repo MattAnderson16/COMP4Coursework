@@ -3,15 +3,106 @@
 \section{Environment}
 
 \subsection{Software}
+\begin{itemize}
+	\item Python 3
+	\item IDLE
+	\item PyQt 4
+	\item MatPlotLib
+	\item SQLite3
+	\item SQLite Inspector
+\end{itemize}
 
 \subsection{Usage Explanation}
+The reason I chose to use Python 3 over other languages such as C++ and Java because it is the only programming language I know in good depth, it has a syntax that is much like pseudocode, the code is much more readable than other languages such as Java, Python is widely used in professional industries and it isn't limited to a specific operating system
+
+I chose to write my program in IDLE because it is an editor specifically designed for Python programming, it is easy to use, can be obtained easily from the official Python website, the syntax is colour coded, it makes debugging easier because errors are displayed when the program is ran and because it gets installed alongside python
+
+The reason I chose to use PyQt 4 over other frameworks such as PySide or wxPython to make the interface is because it is the only one I know how to use, it isn't just limited to one operating system and is also relatively easy to obtain and setup. In addition to this, I used MatPlotLib within the PyQt 4 environment to make the required graphs because it integrates well with PyQt 4 and can go into it's own layout or be grouped into a layout with other widgets.
+
+The reason I chose to use SQLite3 within Python for databasing over a flat file database or other database systems is because it is integrated well into Python by default and can be accessed just by using the line "import sqlite3" without having to install any extra modules as it is part of the standard library, it works well with Python and PyQt4 and it is widely used within professional industries.
+
+The reason I chose to use SQLite Inspector is because it was pre-installed on the college systems so it was the easiest to access, installation at home was simple, it has a clear user interface that is easy to navigate and it allows for debugging and testing of sql statements
 
 \subsection{Features Used}
+\textbf{Python 3}
+\begin{itemize}
+	\item One feature from Python 3 that I used in my system was the ability to import other modules for added features and libraries on top of the basic python framework. This allowed me to use extra pieces of software alongside Python such as PyQt 4 and MatPlotLib to add the needed functionality to my system. 
+
+	\item Another feature from Python 3 that I used was the ability to make separate classes for the different functionalities of the system and call them from other python files through the import functionality and access the methods and attributes from the parent class by instantiating it or calling it as a super class within the constructor
+
+	\item I also used the 'pdb' module as an extra feature of Python to assist with debugging of particularly difficult problems or errors that IDLE wasn't showing logs for or where  the errors in the IDLE command line were particularly confusing.
+\end{itemize}
+
+\textbf{IDLE}
+\begin{itemize}
+	\item One feature of IDLE that I used was the syntax highlighting which assisted in debugging as I could tell if I had closed quotation marks properly etc.
+	\item In addition to that, I also used IDLE's run functionality to test my program and debug through the ability to get errors at run time when the program crashes.
+\end{itemize}
+
+\textbf{PyQt4}
+\begin{itemize}
+	\item From PyQt 4 I used the QMainWindow class as a super class in my own main window to allow for easier creation of a main window interface with options such as a window title which can be changed just by calling the setWindowTitle method with the title passed in as the parameter.
+	\item I also used PyQt 4's stacked layout functionality within my system to allow for multiple displays within my system without having to having to have several windows open at once and have a way to easily switch between them with buttons.
+	\item A third feature from PyQt 4 that I used was it's integration with SQL through the QtSql library to allow for integration of sql into the interface. From this I was able to implement my table layout to display each database table with all the data in the table
+\end{itemize}
+
+\textbf{SQLite3}
+\begin{itemize}
+	\item With SQLite3 I used it's ability to save to a local database file to save the data from my system which allowed me to be able to quickly store and access any required data
+	\item I also used the ability to select specific data from the database file when preparing data for my graphs so that I can have the required data displayed without having to create too many over-complicated algorithms
+\end{itemize}
+
+\textbf{SQLite Inspector}
+\begin{itemize}
+	\item One feature of SQLite Inspector that I used was it's ability to display data from each of my tables so that I know what's being added correctly and what is not when I'm inputting or changing data within my database
+	\item Another feature I used was it's ability to run SQL statements so that I could test my sql queries before adding them to my system to make sure they worked properly
+\end{itemize}
+
+\textbf{MatPlotLib}
+\begin{itemize}
+	\item One specific feature of matplotlib I used was it's ability to create bar charts for displaying average data from my database
+	\item Another specific feature I used was the ability to create pie charts with several tables to display the percentage consumption of the total for every consumption type in the database
+\end{itemize}
 
 \section{System Overview}
 
-%use as many subsections as necessary for the system components
-\subsection{System Component}
+\subsection{Table Display}
+The main component of the table display is a QTableView which is filled with data using a QSqlTableModel and then instantiated and added to a QStackedLayout in the main window and loaded at run time which is done with the 'show\_table' method
+
+To switch between the database tables I implemented a QComboBox which is filled with the table names as they are pulled from the database file by calling the using an SQL query within the 'get\_tables' method and when a different table in the combo box is selected, the program identifies this change through the current index of the QComboBox changing and updates the display by calling the 'update\_table\_view' method which takes the current index of the QComboBox and then calls the 'display\_table' method which takes the table index as a parameter and sets the table of the QSqlTableModel to the given value before  selecting it's data and updating the QTableView
+
+\subsection{Bar Chart Display}
+The bar chart display is a class that is created as a child class of PyQt 4's 'QWidget' class and establishes this when defining the class and in the constructor with a function to call the constructor of the super class.
+
+The bar chart is displayed with a Figure Canvas which is instantiated as the 'ReadingCanvas' class and added to the bar chart display as the main layout. This is then added to the main window by instantiating it and adding it to the QStackedLayout. The bar chart is displayed on the canvas by using the 'GraphController' class to get the required data through an SQL query and returning the results of the query to the bar chart class and then sending them to the 'ReadingCanvas' class as parameters of the 'show\_bar\_graph' method and using matplotlib to create the axis and draw the graph.
+
+To switch between the different tables being displayed I used a QComboBox which the tables are added to using the 'get\_tables' method which uses an SQL query to get these tables and stores them to a list before recreating the list to have only the tables that are needed and then a for loop is used to increment through the list of tables and add them to the QComboBox in turn. The program detects when a user selects another table to be displayed from the ones listed in the QComboBox by telling when the current index of the QComboBox is changed and calling the update\_bar\_chart method which takes the selected date and table and calling the graph\_data method which gets the values from the graph controller using it's 'consumption\_averages' method with the date and table passed as parameters before sending these values to the canvas which uses the 'show\_bar\_graph' method to display the new bar graph.
+
+\subsection{Pie Chart Display}
+The pie chart display is a class which is also created as a child class of PyQt4's `QWidget' class which is called in the initialiser of the pie chart class with the line `super().\_\_init\_\_()'  The class takes the database location as a parameter when being instantiated in the main window and stores this to the variable `self.database' for easier access.
+
+The layout for the pie chart display comprises of a QGridLayout, a QPushButton and a chart canvas inside a QVBoxLayout which is then assigned to the class which is setup as a QWidget and stored in the main window's stacked layout on instantiation.
+
+To change the dates and/or the tables I used QComboBoxes which have the data added to them by getting the table names and dates from the database through SQL queries which are executed within the `get\_dates' and `get\_tables' methods and then added to the QComboBoxes with for loops iterating through lists. The system detects when the user changes the date or table when the index of the relevant combo box is changed and then calls the `update\_pie\_chart' method which gets the date and table combo box indexes and passes them into the `graph\_data' method which gets the totals from the `consumption\_averages' method in the `graph\_controller' class and then pases them into the `show\_pie\_chart' method in the canvas class to display the updated chart
+
+\subsection{adding data}
+The system features several windows which are all child classes of the QMainWindow class and call the super class' initialiser through the `super().\_\_init\_\_()' line in their respective initialisers. They each take the database as a parameter when instantiated in the main window class and store it to the variable `self.database'.
+
+They each take their data using QLineEdits for text inputs, QComboBox for options where there are several set options to choose from or QCalendarWidgets for dates.
+
+They all take their data from the input widgets and store them in local variables and then store them into the database using sql statements  which take the data as doubles or tuples depending on how much data is given or needed.
+
+The `add\_user' class uses regular expressions for validation of the first name, last name and password and if the inputted values meet the criteria, their input boxes get a green border or if the input values are rejected the boxes get a red outline. The outlines are done by using the `setStyleSheet' method available for use with PyQt's QWidgets which take CSS strings as the parameter.
+
+\subsection{editing data}
+Editing data for each of the database tables works very similar to adding data to the tablesi in how it uses QLineEdits, QComboBoxes and QCalendarWidgets, however it also has an extra field for selecting the data to change and gets this data from the relevant table using SQL  statements which get data from the database and stores them into a list which is iterated through with a for loop and each entry added to a combobox in turn.
+
+The validation of editing users works like adding users in how it uses regular expressions and input box highlighting.
+
+\subsection{removing data}
+Removing data works by selecting the relevant data from a QComboBox which is populated using an sql statemt to get the data from the relevant table and storing it into a list before iteratingn through it with a for loop tio add the data to the combobox
+
+The data is removed from the database using SQL statements which take the id of the relevant data and remove the data with the matching ID.
 
 \section{Code Structure}
 
@@ -26,16 +117,159 @@
 \end{comment}
 
 \section{Variable Listing}
-
+\begin{center}
+	\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+	\hline
+	\textbf{Variable name} & \textbf{Purpose} & \textbf{Location in code} \\ \hline
+	cursor & A variable that stores a link to the database cursor & add\_reading\_class.py line 62 \\ \hline
+	self.consumption\_types & A variable that stores a list of the consumption types that are stored in the database & add\_reading\_class.py line 64 \\ \hline
+	Type & A variable used to store the selected consumption type before it gets added to the database & add\_reading\_class.py line 70 \\ \hline
+	Reading & A variable used to store the given consumption reading value before it gets added to the database & add\_reading\_class.py line 72 \\ \hline
+	Date & A variable used to store the given date before it gets added to the database & add\_reading\_class.py line 73 \\ \hline
+	sql & A variable used to store an sql query & add\_reading\_class.py line 74 \\ \hline
+	data & A variable that stores a list of data for an sql query & add\_reading\_class.py line 75 \\ \hline
+	\end{tabular}
+\end{center}
 \section{System Evidence}
 
 \subsection{User Interface}
+\begin{landscape}
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Table_View.png}
+	\caption{Table view interface}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Bar_View.png}
+	\caption{Bar chart interface}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Pie_View.png}
+	\caption{Pie chart interface}
+\end{figure}
+\end{landscape}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Add_User.png}
+	\includegraphics{./maintenance/images/UI_Edit_User.png}
+	\includegraphics{./maintenance/images/UI_Remove_User.png}
+	\caption{Add, edit and remove user data}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Add_Reading.png}
+	\includegraphics{./maintenance/images/UI_Edit_Reading.png}
+	\includegraphics{./maintenance/images/UI_Remove_Reading.png}
+	\caption{Add, edit and remove reading data}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Add_Type.png}
+	\includegraphics{./maintenance/images/UI_Edit_Type.png}
+	\includegraphics{./maintenance/images/UI_Remove_Type.png}
+	\caption{Add, edit and remove type data}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UI_Add_Cost.png}
+	\includegraphics{./maintenance/images/UI_Edit_Cost.png}
+	\includegraphics{./maintenance/images/UI_Remove_Cost.png}
+	\caption{Add, edit and remove cost data}
+\end{figure}
 
 \subsection{ER Diagram}
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/ER_Diagrams.png}
+	\caption{ER Diagram}
+\end{figure}
 
 \subsection{Database Table Views}
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/User_Table_Entries.png}
+	\caption{User table view}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/Type_Table_Entries.png}
+	\caption{Type table view}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/Cost_Table_Entries.png}
+	\caption{Cost table view}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/Reading_Table_Entries.png}
+	\caption{Reading table view}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/UserReading_Table_Entries.png}
+	\caption{UserReading table view}
+\end{figure}
+
+\begin{figure}[H]
+	\includegraphics{./maintenance/images/TypeCost_Table_Entries.png}
+	\caption{TypeCost table view}
+\end{figure}
 
 \subsection{Database SQL}
+\begin{sql}
+create table Type
+(TypeID integer,
+ConsumptionType text,
+ConsumptionTypeDescription text,
+primary key(TypeID))
+\end{sql}
+
+\begin{sql}
+create table Reading
+(ReadingID integer,
+ConsumptionReading real,
+ReadingDate text,
+TypeID integer,
+primary key(ReadingID)
+foreign key(TypeID) references Type(TypeID))
+\end{sql}
+
+\begin{sql}
+create table User
+(UserID integer,
+FirstName text,
+LastName text,
+UserPassword text,
+primary key(UserID))
+\end{sql}
+
+\begin{sql}
+create table Cost
+(CostID integer,
+CostPerUnit real,
+CostStartDate text,
+primary key(CostID)
+\end{sql}
+
+\begin{sql}
+create table UserReading
+(UserReadingID integer,
+UserID integer,
+ReadingID integer,
+primary key(UserReadingID)
+foreign key(UserID) references User(UserID)
+foreign key(ReadingID) references Reading(ReadingID))
+\end{sql}
+
+\begin{sql}
+create table TypeCost
+(TypeCostID integer,
+TypeID integer,
+CostID integer,
+primary key(TypeCostID)
+foreign key(CostID) references Cost(CostID)
+foreign key(TypeID) references Type(TypeID))
+\end{sql}
 
 \subsection{SQL Queries}
 
@@ -56,11 +290,62 @@
 \section{Acknowledgements}
 
 \section{Code Listing}
-\begin{landscape}
-%include as many subsections as you have modules
-\subsection{Module 1}
-%the code below can be uncommented and used to get a code section from a particular file
-\begin{comment}
-\pythonfile[firstline=5]{./tex/function_programs/print_function.py}
-\end{comment}
-\end{landscape}
+\subsection{Main Window}
+\pythonfile{./Maintenance/Implementation/new_main_window.py}
+
+\subsection{Add Reading Class}
+\pythonfile{./Maintenance/Implementation/add_reading_class.py}
+
+\subsection{Edit Reading Class}
+\pythonfile{./Maintenance/Implementation/edit_reading_class.py}
+
+\subsection{Remove Reading Class}
+\pythonfile{./Maintenance/Implementation/remove_reading_class.py}
+
+\subsection{Add Cost Class}
+\pythonfile{./Maintenance/Implementation/add_cost_class.py}
+
+\subsection{Edit Cost Class}
+\pythonfile{./Maintenance/Implementation/edit_cost_class.py}
+
+\subsection{Delete Cost Class}
+\pythonfile{./Maintenance/Implementation/delete_cost_class.py}
+
+\subsection{Add User Class}
+\pythonfile{./Maintenance/Implementation/add_user_class.py}
+
+\subsection{Edit User Class}
+\pythonfile{./Maintenance/Implementation/edit_user_class.py}
+
+\subsection{Remove User Class}
+\pythonfile{./Maintenance/Implementation/remove_user_class.py}
+
+\subsection{Add Type Class}
+\pythonfile{./Maintenance/Implementation/add_type_class.py}
+
+\subsection{Edit Type Class}
+\pythonfile{./Maintenance/Implementation/edit_type_class.py}
+
+\subsection{Delete Type Class}
+\pythonfile{./Maintenance/Implementation/delete_type_class.py}
+
+\subsection{Table Layout Class}
+\pythonfile{./Maintenance/Implementation/table_layout_class_new.py}
+
+\subsection{Bar Widget Class}
+\pythonfile{./Maintenance/Implementation/bar_widget_class.py}
+
+\subsection{Pie Widget Class}
+\pythonfile{./Maintenance/Implementation/pie_widget_class.py}
+
+\subsection{Scatter Widget Class}
+\pythonfile{./Maintenance/Implementation/scatter_widget_class.py}
+
+\subsection{Line Widget Class}
+\pythonfile{./Maintenance/Implementation/line_widget_class.py}
+
+\subsection{Reading Canvas Class}
+\pythonfile{./Maintenance/Implementation/reading_canvas_class.py}
+
+\subsection{Graph Controller Class}
+\pythonfile{./Maintenance/Implementation/graph_controller_class.py}
