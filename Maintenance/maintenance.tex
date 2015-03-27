@@ -106,30 +106,84 @@ The data is removed from the database using SQL statements which take the id of 
 
 \section{Code Structure}
 
-%use as many subsections as necessary for the code sections
-\subsection{Particular Code Section}
-%the code below can be uncommented and used to get a code section from a particular file
-\begin{comment}
+\subsection{'show\_bar\_graph' method}
 \begin{figure}[H]
-    \pythonfile[firstline=5,lastline=10]{./tex/function_programs/print_function.py}
-    \caption{The print() function} \label{fig:print_function}
+    \pythonfile[firstline=8,lastline=26]{./maintenance/implementation/reading_canvas_class.py}
+    \caption{The 'show\_bar\_graph' method} \label{python:show_bar_graph_method}
 \end{figure}
-\end{comment}
+
+This code section is part of the 'ReadingCanvas' class [See figure \ref{python:reading_canvas} on page \pageref{python:reading_canvas}]. I chose to have the 'show\_bar\_graph' method inside this class as it is what forms the bar graph canvas and therefore it makes sense to have it in the 'ReadingCanvas' class which has the base attributes which all of the graph canvases share.
+
+The class initialiser is included in this code section because it includes the base attributes such as 'self.fig' which forms the 'page' for the graph to be drawn in and 'self.ax' which forms the graph axis that will be used by the 'show\_bar\_graph' method.
+
+The 'data' and 'date' parameters are passed directly into the 'show\_bar\_graph' method rather than into the initialiser first because they are directly used by this method to form the graph, they aren't needed to be kept for a substantial amount of time and they can change each time the method is called.
+
+\subsection{'GraphController' class methods}
+
+\begin{figure}[H]
+    \pythonfile[firstline=7,lastline=58]{./maintenance/implementation/graph_controller_class.py}
+    \caption{The 'GraphController' class methods} \label{python:graph_controller_class_methods}
+\end{figure}
+These methods were put into the 'GraphController' class because they are used to get the specific data that the graphs require from the database return it. By putting them into a separate class, I can keep them all together and call them from the different classes for each of the graphs rather than put them into the different classes which eases debugging and saves me having to write the methods several times in each of the other classes.
+
+The reason each of the methods take a date as a parameter rather than it being stored as an attribute in the initialiser is because the date provided to each of the methods can vary each time one of the methods are called so by just providing the date as a parameter rather than storing it as an attribute in the initialiser it makes it easier to allow for the date to change each time one of the methods are called.
 
 \section{Variable Listing}
 \begin{center}
-	\begin{tabular}{|p{4cm}|p{4cm}|p{4cm}|}
+	\begin{tabular}{|p{4cm}|p{4.5cm}|p{4.5cm}|}
 	\hline
 	\textbf{Variable name} & \textbf{Purpose} & \textbf{Location in code} \\ \hline
-	cursor & A variable that stores a link to the database cursor & add\_reading\_class.py line 62 \\ \hline
-	self.consumption\_types & A variable that stores a list of the consumption types that are stored in the database & add\_reading\_class.py line 64 \\ \hline
-	Type & A variable used to store the selected consumption type before it gets added to the database & add\_reading\_class.py line 70 \\ \hline
-	Reading & A variable used to store the given consumption reading value before it gets added to the database & add\_reading\_class.py line 72 \\ \hline
-	Date & A variable used to store the given date before it gets added to the database & add\_reading\_class.py line 73 \\ \hline
-	sql & A variable used to store an sql query & add\_reading\_class.py line 74 \\ \hline
-	data & A variable that stores a list of data for an sql query & add\_reading\_class.py line 75 \\ \hline
+	path & A variable that stores the location of the database when it is taken from the QFileDialog & main\_window.py line 134 [figure \ref{python:main_window} on page \pageref{python:main_window} ]\\ \hline
+	self.database\_open & A variable that stores a boolean value corresponding to whether the database is open or not &  main\_window.py line 162 [figure \ref{python:main_window} on page \pageref{python:main_window}] \\ \hline
+	self.database & A variable that stores a link to the database taken from a parameter passed into the initialiser on instantiation in the main window & add\_reading\_class.py on line 10 [figure \ref{python:add_reading} on page \pageref{python:add_reading}], edit\_reading\_class.py line 9 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading}] \\ \hline	
+	cursor & A variable that stores a link to the database cursor & add\_reading\_class.py line 62 [figure \ref{python:add_reading} on page \pageref{python:add_reading}], edit\_reading\_class.py line 59[figure \ref{python:edit_reading} on page \pageref{python:edit_reading}] \\ \hline
+	self.consumption\_types & A variable that stores a list of the consumption types that are stored in the database & add\_reading\_class.py line 64 [figure \ref{python:add_reading} on page \pageref{python:add_reading}] \\ \hline
+	Type & A variable used as a counter when iterating the consumption\_types list & add\_reading\_class.py line 66,67 [figure \ref{python:add_reading} on page \pageref{python:add_reading}] \\ \hline
+	Type & A variable used to store the selected consumption type before it gets added to the database & add\_reading\_class.py line 70 [figure \ref{python:add_reading} on page \pageref{python:add_reading}] \\ \hline
+	Date & A variable used to store the given date before it gets added to the database & add\_reading\_class.py line 73 [figure \ref{python:add_reading} on page \pageref{python:add_reading}] \\ \hline
+	sql & A variable used to store an sql query & add\_reading\_class.py line 74 [figure \ref{python:add_reading} on page \pageref{python:add_reading}] \\ \hline
+	data & A variable that stores a list of data for an sql query & add\_reading\_class.py line 75 [figure \ref{python:add_reading} on page \pageref{python:add_reading}], edit\_reading\_class.py line 73 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading}] \\ \hline
+	readings & A variable used to store a list of the available readings in the database & edit\_reading\_class.py line 61 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading}] \\ \hline
+	reading & A variable used to store the selected reading & add\_reading\_class.py line 72 [figure \ref{python:add_reading} on page \pageref{python:add_reading}], edit\_reading\_class.py line 67 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading}], remove\_reading\_class.py line 54 [figure \ref{python:remove_reading} on page \pageref{python:remove_reading}] \\ \hline
+	\end{tabular}
+
+	\begin{tabular}{|p{4cm}|p{4.5cm}|p{4.5cm}|}
+	\hline
+	new\_reading & A variable used to store the new reading that will be added to the database & edit\_reading\_class.py line 68 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading} ]\\ \hline
+	new\_date & A variable used to store the new date that will be added to the database & edit\_reading\_class.py line 69 [figure \ref{python:edit_reading} on page \pageref{python:edit_reading}] \\ \hline
+	Cost & A variable used to store the value for the cost. & add\_cost\_class.py line 80 [figure \ref{python:add_cost} on page \pageref{python:add_cost}], edit\_cost\_class.py on line 68 [figure \ref{python:edit_cost} on page \pageref{python:edit_cost}], delete\_cost\_class.py on line 53 [figure \ref{python:delete_cost} on page \pageref{python:delete_cost}] \\ \hline
+	CostID & A variable used to store the cost ID. & add\_cost\_class.py line 86 [figure \ref{python:add_cost} on page \pageref{python:add_cost}] \\ \hline
+	Costs & A variable used to store a list of costs in the database & edit\_cost\_class.py line 62 [figure \ref{python:edit_cost} on page \pageref{python:edit_cost}] \\ \hline
+	new\_cost & A variable used to store the new cost & edit\_cost\_class.py line 71 [figure \ref{python:edit_cost} on page \pageref{python:edit_cost}] \\ \hline
+	self.name\_pattern & A variable used to store the regular expression for the name validation & add\_user\_class.py line 16 [figure \ref{python:add_user} on page \pageref{python:add_user}], edit\_user\_class.py line 17 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	self.password\_pattern & A variable used to store the regular expression for the password validation & add\_user\_class.py line 17 [figure \ref{python:add_user} on page \pageref{python:add_user}], edit\_user\_class.py line 18 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	password & A variable used to store the value for the password & add\_user\_class.py line 65 [figure \ref{python:add_user} on page \pageref{python:add_user}], edit\_user\_class.py line 76 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	name & A variable used to store the name for validation & add\_user\_class.py line 72 [figure \ref{python:add_user} on page \pageref{python:add_user}], edit\_user\_class.py line 83 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	first\_name & A variable used to store the first name & add\_user\_class.py line 86 [figure \ref{python:add_user} on page \pageref{python:add_user}] \\ \hline
+	last\_name & A variable used to store the last name & add\_user\_class.py line 87 [figure \ref{python:add_user} on page \pageref{python:add_user}] \\ \hline
+	User & A variable used to store the selected user & edit\_user\_class.py line 106 [figure \ref{python:edit_user} on page \pageref{python:edit_user}], remove\_user\_class.py line 53 [figure \ref{python:remove_user} on page \pageref{python:remove_user}] \\ \hline
+	new\_firstname & A variable used to store the new first name & edit\_user\_class.py line 109 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	new\_lastname & A variable used to store the new last name & edit\_user\_clas.py line 110 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	new\_password & A variable used to store the new password & edit\_user\_class.py line 111 [figure \ref{python:edit_user} on page \pageref{python:edit_user}] \\ \hline
+	users & A variable used to store a list of available users & remove\_user\_class.py line 47 [figure \ref{python:remove_user} on page \pageref{python:remove_user}] \\ \hline
+	\end{tabular}
+	
+	\begin{tabular}{|p{4cm}|p{4.5cm}|p{4.5cm}|}
+	\hline
+	Type & A variable used to store the type name & add\_type\_class.py line 47 [figure \ref{python:add_type} on page \pageref{python:add_type}], edit\_type\_class.py line 69 [figure \ref{python:edit_type} on page \pageref{python:edit_type}], delete\_type\_class.py line 53 [figure \ref{python:delete_type} on page \pageref{python:delete_type}] \\ \hline
+	Description & A variable used to store the type description & add\_type\_class.py line 48 [figure \ref{python:add_type} on page \pageref{python:add_type}] \\ \hline
+	types & A variable used to store a list of available types & edit\_type\_class.py line 63 [figure \ref{python:edit_type} on page \pageref{python:edit_type}], delete\_type\_class.py line 47 [figure \ref{python:delete_type} on page \pageref{python:delete_type}] \\ \hline
+	new\_type & A variable used to store the new type name & edit\_type\_class.py line 70 [figure \ref{python:edit_type} on page \pageref{python:edit_type}] \\ \hline
+	new\_description & A variable used to store the new type description & edit\_type\_class.py line 71 [figure \ref{python:edit_type} on page \pageref{python:edit_type}] \\ \hline
+	tables & A variable used to store a list of the tables & table\_layout\_class.py line 75 [figure \ref{python:table_layout} on page \pageref{python:table_layout}] \\ \hline
+	table & A variable used to store the currently selected table & table\_layout\_class line 97 [figure \ref{python:table_layout} on page \pageref{python:table_layout}] \\ \hline
+	totals & A variable used to store the total average consumption for the past month & bar\_widget\_class.py line 88 [figure \ref{python:bar_widget} on page \pageref{python:bar_widget}, pie\_widget\_class line [figure \ref{python:pie_widget} on page \pageref{python:pie_widget}] \\ \hline
+	data\_dict & A variable to store a dictionary & reading\_canvas\_class.py line 17 [figure \ref{python:reading_canvas} on page \pageref{python:reading_canvas}] \\ \hline
+	costs & A variable to store a list of costs & reading\_canvas\_class.py line 40 [figure \ref{pythin:reading_canvas} on page \pageref{python:reading_canvas}] \\ \hline
+	labels & A variable to store a list of variables & reading\_canvas\_class.py line 41 [figure \ref{pythin:reading_canvas} on page \pageref{python:reading_canvas}] \\ \hline
 	\end{tabular}
 \end{center}
+
 \section{System Evidence}
 
 \subsection{User Interface}
@@ -272,80 +326,152 @@ foreign key(TypeID) references Type(TypeID))
 \end{sql}
 
 \subsection{SQL Queries}
+\begin{sql}
+SELECT Type.ConsumptionType,Cost.CostPerUnit
+                     FROM Type, Cost, Reading, TypeCost
+                     WHERE Type.TypeID = Reading.TypeID and
+                     TypeCost.CostID = Cost.CostID and
+                     TypeCost.TypeID = Type.TypeID and
+                     Cost.CostStartDate = Reading.ReadingDate and
+                     Cost.CostStartDate = ?
+                     GROUP BY Type.ConsumptionType
+\end{sql}
+This query gets the consumption types from the type table, the costs per unit from the cost table and compares them with data in the typecost table to make sure they correspond and then compares the date of each consumption cost per unit with a reading date to make sure they match and groups it under the consumption types before providing only data that fully corresponds with the other data that was used in comparation
+
+\begin{sql}
+SELECT avg(Reading.ConsumptionReading), Reading.ReadingDate
+                     FROM Reading, Type
+                     WHERE Type.TypeID = Reading.TypeID and
+                     Reading.ReadingDate = ? and
+                     Type.ConsumptionType = ?
+                     GROUP BY Reading.ConsumptionReading
+\end{sql}
+This query gets an average of the consumption readings and the reading date from the reading table then compares the reading type with the provided type ID before grouping the data under the specific readings
+
+\begin{sql}
+SELECT Type.ConsumptionType,avg(Reading.ConsumptionReading) as average
+                     FROM Type, Reading
+                     WHERE Type.TypeID = Reading.TypeID and
+                     Reading.ReadingDate = ?
+                     GROUP BY Type.ConsumptionType
+\end{sql}
+This gets an average of the reading consumptions from the reading table and the type from the type table but only when the consumption reading's Type ID matches the Type ID and the reading's date matches the date provided when the query is executed
 
 \section{Testing}
 
 \subsection{Summary of Results}
+From my testing I found out my system is fairly reliable and robust because most of my tests were successful and worked as expected and the program crashed very few times. [See the testing section starting on page 60]
+
+The main weakness of my testing method was that I couldn't viably test every single possible combination for erroneous, normal and boundary data in my system as it would have taken too long and the way I tested my system made it a slow and tedious process.
+
+The strengths of my testing method were the thorough testing of each input window to make sure it accepts data and validates data properly and the way in which I did it meant that I could easily keep track of which parts of my system I had tested, and which parts I had not tested.
 
 \subsection{Known Issues}
+Some of the known issues of my system are:
+\begin{itemize}
+	\item{The validation of the first name and last name - accepts special characters when it shouldn't - Possibly a problem with the regular expression}
+	\item{The system doesn't reject erroneous data from the add reading window - Could be fixed by adding a regular expression for validation}
+	\item{The system doesn't reject erroneous data from the add cost window - Could be fixed by adding a regular expression for validation}
+	\item{The system doesn't reject erroneous data from the add type window - Could be fixed by adding a regular expression for validation}
+	\item{The system doesn't edit the consumption type data properly (When just attempting to edit the consumption type name, it doesn't get changed and the consumption type description gets removed) - I am not sure how to fix this}
+	\item{The system doesn't display the scatter and line graph layouts properly (graphs not generating) - I am not sure how to fix these}
+	\item{The system doesn't display an option to change the table for the scatter graph - This could be fixed by adding a combobox to select the table and a method to populate this combobox and then changing the combo\_box\_layout to a QGridLayout with the select\_date\_label in position (1,1), the select\_date combo box in position (1,2) and the label and combobox for selecting the table in positions (2,1) and (2,2) respectively}
+\end{itemize}
 
 \section{Code Explanations}
 
 \subsection{Difficult Sections}
 
+\subsubsection{bar chart creation}
+\begin{figure}[H]
+	\pythonfile[firstline=15,lastline=26]{./Maintenance/Implementation/reading_canvas_class.py}
+	\caption{Creation of the bar chart canvas} \label{python:bar_chart_canvas_code}
+\end{figure}
+The first line of this method, 'self.ax.clear()' works by clearing the axis ready to be populated with data prepared for the bar graph. Then then the data that has been passed into the method under the parameter 'data' is converted into a dictionary and stored in the variable 'data\_dict'. 
+
+After this is done the for loop forms the bar graph with the enumerate() function taking the current value selected in the data dictionary and returns a counter value and the key corresponding to the data for each iteration of the loop. The line 'self.ax.bar(bar\_number, data\_dict[key])' constructs a single bar which is plotted onto the chart with 'bar\_number' being used as the value for the height of the bar.
+
+'self.ax.set\_xticks(np.arange(len(data\_dict))+0.4)' sets the position of each of the 'ticks' on the x-axis to the center of their corresponding bar by adding 0.4 to their position. The value needs to be 0.4 as the default bar size is 0.8
+
+'self.ax.set\_xticklables(list(data\_dict.keys()))' sets the labels of each 'tick' on the x-axis to the corresponding key of the data dictionary and then 'self.fig.autofmt\_xdate()' stops the labels overlapping
+
+
+\subsubsection{pie chart creation}
+\begin{figure}[H]
+	\pythonfile[firstline=28,lastline=35]{./Maintenance/Implementation/reading_canvas_class.py}
+	\caption{Creation of the pie chart canvas} \label{python:pie_chart_canvas_code}
+\end{figure}
+In this method, the first two lines work as they do in the 'show\_bar\_chart'. The next line, 'data = list(data\_dict.values())', works by getting the values stored in the data dictionary and stores them in a list named 'data' then the corresponding keys are stored in the 'labels' list.
+
+Next, the line 'self.ax.pie(data,labels=labels, autopct = '%1.1f%%') creates the pie chart on the subplot  using the provided data and labels. 'autopct = '%.1.1f%%' formats the data values to 1 decimal place and then adds the percentage symbol
+
 \subsection{Self-created Algorithms}
 
 \section{Settings}
+For this system to work the PyQt, MatPlotLib, Numpy, RE and SQLite3 modules need to be available in Python.
 
 \section{Acknowledgements}
+The regular expression used in the validation of passwords in add user [\ref{python:add_user} on page \pageref{python:add_user}] and edit user [\ref{python:edit_user} on page \pageref{python:edit_user}] came from \url{http://stackoverflow.com/questions/2990654/how-to-test-a-regex-password-in-python} in the first comment by the user 'Amber'
 
 \section{Code Listing}
+\begin{landscape}
 \subsection{Main Window}
-\pythonfile{./Maintenance/Implementation/new_main_window.py}
+\pythonfile{./Maintenance/Implementation/new_main_window.py} \label{python:main_window}
 
 \subsection{Add Reading Class}
-\pythonfile{./Maintenance/Implementation/add_reading_class.py}
+\pythonfile{./Maintenance/Implementation/add_reading_class.py} \label{python:add_reading}
 
 \subsection{Edit Reading Class}
-\pythonfile{./Maintenance/Implementation/edit_reading_class.py}
+\pythonfile{./Maintenance/Implementation/edit_reading_class.py} \label{python:edit_reading}
 
 \subsection{Remove Reading Class}
-\pythonfile{./Maintenance/Implementation/remove_reading_class.py}
+\pythonfile{./Maintenance/Implementation/remove_reading_class.py} \label{python:remove_reading}
 
 \subsection{Add Cost Class}
-\pythonfile{./Maintenance/Implementation/add_cost_class.py}
+\pythonfile{./Maintenance/Implementation/add_cost_class.py} \label{python:add_cost}
 
 \subsection{Edit Cost Class}
-\pythonfile{./Maintenance/Implementation/edit_cost_class.py}
+\pythonfile{./Maintenance/Implementation/edit_cost_class.py} \label{python:edit_cost}
 
 \subsection{Delete Cost Class}
-\pythonfile{./Maintenance/Implementation/delete_cost_class.py}
+\pythonfile{./Maintenance/Implementation/delete_cost_class.py} \label{python:delete_cost}
 
 \subsection{Add User Class}
-\pythonfile{./Maintenance/Implementation/add_user_class.py}
+\pythonfile{./Maintenance/Implementation/add_user_class.py} \label{python:add_user}
 
 \subsection{Edit User Class}
-\pythonfile{./Maintenance/Implementation/edit_user_class.py}
+\pythonfile{./Maintenance/Implementation/edit_user_class.py} \label{python:edit_user}
 
 \subsection{Remove User Class}
-\pythonfile{./Maintenance/Implementation/remove_user_class.py}
+\pythonfile{./Maintenance/Implementation/remove_user_class.py} \label{python:remove_user}
 
 \subsection{Add Type Class}
-\pythonfile{./Maintenance/Implementation/add_type_class.py}
+\pythonfile{./Maintenance/Implementation/add_type_class.py} \label{python:add_type}
 
 \subsection{Edit Type Class}
-\pythonfile{./Maintenance/Implementation/edit_type_class.py}
+\pythonfile{./Maintenance/Implementation/edit_type_class.py} \label{python:edit_type}
 
 \subsection{Delete Type Class}
-\pythonfile{./Maintenance/Implementation/delete_type_class.py}
+\pythonfile{./Maintenance/Implementation/delete_type_class.py} \label{python:remove_type}
 
 \subsection{Table Layout Class}
-\pythonfile{./Maintenance/Implementation/table_layout_class_new.py}
+\pythonfile{./Maintenance/Implementation/table_layout_class_new.py} \label{python:table_layout}
 
 \subsection{Bar Widget Class}
-\pythonfile{./Maintenance/Implementation/bar_widget_class.py}
+\pythonfile{./Maintenance/Implementation/bar_widget_class.py} \label{python:bar_widget}
 
 \subsection{Pie Widget Class}
-\pythonfile{./Maintenance/Implementation/pie_widget_class.py}
+\pythonfile{./Maintenance/Implementation/pie_widget_class.py} \label{python:pie_widget}
 
 \subsection{Scatter Widget Class}
-\pythonfile{./Maintenance/Implementation/scatter_widget_class.py}
+\pythonfile{./Maintenance/Implementation/scatter_widget_class.py} \label{python:scatter_widget}
 
 \subsection{Line Widget Class}
-\pythonfile{./Maintenance/Implementation/line_widget_class.py}
+\pythonfile{./Maintenance/Implementation/line_widget_class.py} \label{python:line_widget}
 
 \subsection{Reading Canvas Class}
-\pythonfile{./Maintenance/Implementation/reading_canvas_class.py}
+\pythonfile{./Maintenance/Implementation/reading_canvas_class.py} \label{python:reading_canvas}
 
 \subsection{Graph Controller Class}
-\pythonfile{./Maintenance/Implementation/graph_controller_class.py}
+\pythonfile{./Maintenance/Implementation/graph_controller_class.py} \label{python:graph_controller}
+\end{landscape}
